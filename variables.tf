@@ -22,9 +22,3 @@ variable "top_cidr" {
 variable "address_family" {
   default = "ipv4"
 }
-
-variable "pool_keys" {
-  default = ["allocation_default_netmask_length", "allocation_max_netmask_length",
-    "allocation_min_netmask_length", "allocation_resource_tags", "auto_import", "aws_service",
-  "cidr", "locale", "description"]
-}

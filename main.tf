@@ -13,25 +13,25 @@ locals {
 
   # mid pools without the top_tier_cidr
   # tier_1_pool_names = [for k, v in var.ipam_configuration : k]
-  tier_2_pool_names = flatten([ for k, v in var.ipam_configuration : [for k2, _ in v.sub_pool : "${k}/${k2}"]]) # if !contains(var.pool_keys, k2)
-  tier_2_pool_names_with_3rd_tier = [ for _, v in local.tier_2_pool_names  : v if try(var.ipam_configuration[split("/", v)[0]].sub_pool[split("/", v)[1]].sub_pool, null) != null ]
-  tier_3_pool_names = flatten([ for _, v in local.tier_2_pool_names_with_3rd_tier : [for k2, v2 in keys(lookup(var.ipam_configuration, split("/", v)[0], null).sub_pool[split("/", v)[1]].sub_pool): "${v}/${v2}"]])
+  tier_2_pool_names = flatten([ for k, v in var.ipam_configuration : [for k2, _ in v.sub_pools : "${k}/${k2}"]]) # if !contains(var.pool_keys, k2)
+  tier_2_pool_names_with_3rd_tier = [ for _, v in local.tier_2_pool_names  : v if try(var.ipam_configuration[split("/", v)[0]].sub_pools[split("/", v)[1]].sub_pools, null) != null ]
+  tier_3_pool_names = flatten([ for _, v in local.tier_2_pool_names_with_3rd_tier : [for k2, v2 in keys(lookup(var.ipam_configuration, split("/", v)[0], null).sub_pools[split("/", v)[1]].sub_pools): "${v}/${v2}"]])
 
-# [ for _, v in ["onea/testa", "onea/twoa"] : [for k2, v2 in keys(lookup(var.ipam_configuration, split("/", v)[0], null).sub_pool[split("/", v)[1]].sub_pool): "${v}/${v2}"]]
+# [ for _, v in ["onea/testa", "onea/twoa"] : [for k2, v2 in keys(lookup(var.ipam_configuration, split("/", v)[0], null).sub_pools[split("/", v)[1]].sub_pools): "${v}/${v2}"]]
 
-  # tier_3_pool_names = compact(flatten([ for _, v in local.tier_2_pool_names : try(keys(var.ipam_configuration[split("/", v)[0]].sub_pool[split("/", v)[1]].sub_pool), null) ]))
+  # tier_3_pool_names = compact(flatten([ for _, v in local.tier_2_pool_names : try(keys(var.ipam_configuration[split("/", v)[0]].sub_pools[split("/", v)[1]].sub_pools), null) ]))
 
 
-# [ for _, v in [ "onea/testa", "onea/twoa", "oneb/twob",]  : [ for k2, v2 in lookup(var.ipam_configuration, split("/", v)[0], null).sub_pool[split("/", v)[1]] : k2 ] ]
+# [ for _, v in [ "onea/testa", "onea/twoa", "oneb/twob",]  : [ for k2, v2 in lookup(var.ipam_configuration, split("/", v)[0], null).sub_pools[split("/", v)[1]] : k2 ] ]
 # [
 #   [
 #     "cidr",
 #     "locale",
-#     "sub_pool",
+#     "sub_pools",
 #   ],
 #   [
 #     "cidr",
-#     "sub_pool",
+#     "sub_pools",
 #   ],
 #   [
 #     "cidr",
@@ -107,8 +107,9 @@ module "tier_two" {
   ipam_scope_id       = aws_vpc_ipam.main.private_default_scope_id
   source_ipam_pool_id = module.tier_one[split("/", each.key)[0]].pool.id
 
-  pool_config = var.ipam_configuration[split("/", each.key)[0]].sub_pool[split("/", each.key)[1]]
+  pool_config = var.ipam_configuration[split("/", each.key)[0]].sub_pools[split("/", each.key)[1]]
   implied_locale = module.tier_one[split("/", each.key)[0]].pool.locale
+  implied_description = each.key
 
   depends_on = [
     module.tier_one
@@ -121,14 +122,17 @@ module "tier_three" {
 
   address_family      = var.address_family
   ipam_scope_id       = aws_vpc_ipam.main.private_default_scope_id
+
   source_ipam_pool_id = module.tier_two[
       join("/", [split("/", each.key)[0], split("/", each.key)[1]])
       ].pool.id
 
-  pool_config = var.ipam_configuration[split("/", each.key)[0]].sub_pool[split("/", each.key)[1]].sub_pool[split("/", each.key)[2]]
+  pool_config = var.ipam_configuration[split("/", each.key)[0]].sub_pools[split("/", each.key)[1]].sub_pools[split("/", each.key)[2]]
+
   implied_locale = module.tier_two[
       join("/", [split("/", each.key)[0], split("/", each.key)[1]])
       ].pool.locale
+  implied_description = each.key
 
   depends_on = [
     module.tier_two

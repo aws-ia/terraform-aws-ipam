@@ -1,6 +1,6 @@
-output "top_level_pool" {
-    value = module.basic.pool
-}
+# output "top_level_pool" {
+#     value = module.basic.pool
+# }
 
 # output "mid_level_pools" {
 #     value = module.basic.mid_level_pools
