@@ -1,0 +1,3 @@
+variable "ipam_configuration" {
+
+}

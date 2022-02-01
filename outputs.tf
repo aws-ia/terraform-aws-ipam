@@ -1,11 +1,4 @@
-output "top_level_pool" {
-    value = aws_vpc_ipam_pool.top
-}
-
-output "mid_level_pools" {
-    value = aws_vpc_ipam_pool.mid
-}
-
-output "region_level_pools" {
-    value = aws_vpc_ipam_pool.regional
+output "operating_regions" {
+  description = "List of all IPAM operating regions."
+  value       = local.operating_regions
 }

@@ -10,3 +10,15 @@ settings:
   required: true
   sensitive: true
   type: true
+
+recursive:
+  enabled: true
+  path: modules
+
+sort:
+  enabled: true
+  by: required
+
+output:
+  file: README.md
+  mode: replace
