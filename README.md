@@ -1,1 +1,93 @@
-> Note: This module is in alpha state and is likely to contain bugs and updates may introduce breaking changes. It is not recommended for production use at this time.
+<!-- BEGIN_TF_DOCS -->
+# AWS IP Address Manager Deployment Module
+
+This module deploys complex AWS IPAM configurations with varying configuration. It is designed to flexible for many different use cases. The Most common use cases / IPAM designs are highlighted in the `examples/<>` directory.
+
+## Configuration via the `var.ipam_configuration` variable
+
+This module leans heavily on `var.ipam_configuration` which is a multi-tier nested map that describes exactly how you want your ipam pools to be nested. It can accept most `aws_vpc_ipam_pool` & `aws_vpc_ipam_pool_cidr` attributes (detailed below) as well as RAM share pools (at any tier) to valid AWS principals. Pools are nested up to 3 tiers deep in a root pool that defines the overall `address_family`. The `ipam_configuration` variable is the structure of the other 3 tiers. The sub-module [sub\_pool variables.tf file has a variable var.pool\_config](./modules/sub\_pool/variables.tf#L1) that defines the structure that each pool can accept.
+
+The key of a `pool_config` is the name of the pool, following by its attributes, `ram_share_principals`, and a `sub_pools` map, which is another nested `pool_config`.
+
+```terraform
+variable "pool_config" {
+  type = object({
+    cidr                 = list(string)
+    ram_share_principals = optional(list(string))
+
+    locale                            = optional(string)
+    allocation_default_netmask_length = optional(string)
+    allocation_max_netmask_length     = optional(string)
+    allocation_min_netmask_length     = optional(string)
+    auto_import                       = optional(string)
+    aws_service                       = optional(string)
+    description                       = optional(string)
+    publicly_advertisable             = optional(bool)
+
+    allocation_resource_tags   = optional(map(string))
+    tags                       = optional(map(string))
+    cidr_authorization_context = optional(map(string))
+
+    sub_pools = optional(any)
+  })
+}
+```
+
+### Locales
+
+IPAM pools **do not inherit attributes** from their parent pools. Locales cannot change from parent to child. For that reason, once a pool in `var.ipam_configuration` defines a `locale` all other child pools have an `implied_locale`.
+
+### Implied Descriptions
+
+Descriptions of pools are implied from the name-hierarchy of the pool. For example a with 2 parents "us-east-1" -> "dev" will have an `implied_description` of `"us-east-1/dev"`. You can override the description at any pool level by specifying a description.
+
+`implied_desription = var.pool_config.description == null ? var.implied_description : var.pool_config.description`
+
+### Operating Regions
+
+IPAM operating\_region must be set for the primary region in your terraform provider block and any regions you wish to set a `locale` at. For that reason we construct the `aws_vpc_ipam.operating_regions` from your `ipam_configuration` + `data.aws_region.current.name`.
+
+## Requirements
+
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.15.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 3.73.0 |
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 3.73.0 |
+
+## Modules
+
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_tier_one"></a> [tier\_one](#module\_tier\_one) | ./modules/sub_pool | n/a |
+| <a name="module_tier_three"></a> [tier\_three](#module\_tier\_three) | ./modules/sub_pool | n/a |
+| <a name="module_tier_two"></a> [tier\_two](#module\_tier\_two) | ./modules/sub_pool | n/a |
+
+## Resources
+
+| Name | Type |
+|------|------|
+| [aws_vpc_ipam.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_ipam) | resource |
+| [aws_vpc_ipam_pool.top](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_ipam_pool) | resource |
+| [aws_vpc_ipam_pool_cidr.top](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_ipam_pool_cidr) | resource |
+| [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_ipam_configuration"></a> [ipam\_configuration](#input\_ipam\_configuration) | A multi-tier-nested map describing nested IPAM pools. Can nest up to 3 tiers with the top tier being outside the `ipam_configuration`. This attribute is quite complex, see README.md for further explanation. | `any` | n/a | yes |
+| <a name="input_address_family"></a> [address\_family](#input\_address\_family) | IPv4/6 address family. | `string` | `"ipv4"` | no |
+| <a name="input_top_cidr"></a> [top\_cidr](#input\_top\_cidr) | Top level cidr block | `string` | `null` | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| <a name="output_operating_regions"></a> [operating\_regions](#output\_operating\_regions) | List of all IPAM operating regions. |
+<!-- END_TF_DOCS -->
