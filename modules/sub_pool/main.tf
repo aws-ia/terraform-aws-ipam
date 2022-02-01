@@ -8,7 +8,7 @@ resource "aws_vpc_ipam_pool" "sub" {
   source_ipam_pool_id = var.source_ipam_pool_id
 
   description                       = local.description
-  locale                            = var.pool_config.locale == null ? var.implied_locale : var.pool_config.locale # try( )  # try(var.pool_config.locale, null)
+  locale                            = var.implied_locale == null ? var.pool_config.locale : var.implied_locale
   allocation_default_netmask_length = var.pool_config.allocation_default_netmask_length
   allocation_max_netmask_length     = var.pool_config.allocation_max_netmask_length
   allocation_min_netmask_length     = var.pool_config.allocation_min_netmask_length
@@ -38,9 +38,7 @@ resource "aws_vpc_ipam_pool_cidr" "sub" {
 resource "aws_ram_resource_share" "sub" {
   count = var.pool_config.ram_share_principals == null ? 0 : 1
 
-  name = replace(local.description, "/", "-")
-  # TODO: parameterize?
-  allow_external_principals = true
+  name = replace(var.implied_description, "/", "-")
 }
 
 resource "aws_ram_resource_association" "sub" {

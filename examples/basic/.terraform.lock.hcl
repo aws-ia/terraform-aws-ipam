@@ -1,6 +1,14 @@
 # This file is maintained automatically by "terraform init".
 # Manual edits may be lost in future updates.
 
+provider "ipam/hashicorp/aws" {
+  version     = "1.1.1"
+  constraints = "1.1.1"
+  hashes = [
+    "h1:8ZLeQIEr0AghaN5kYKy283FUnSU2PanuJxtjIrsXptk=",
+  ]
+}
+
 provider "registry.terraform.io/hashicorp/aws" {
   version     = "3.74.0"
   constraints = ">= 3.72.0, >= 3.73.0"

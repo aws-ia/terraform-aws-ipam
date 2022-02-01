@@ -21,13 +21,28 @@ variable "pool_config" {
 }
 
 variable "implied_locale" {
-  default = null
+  description = "Locale is implied from a parent pool even if another is specified. Its not possible to set child pools to different locales."
+  type        = string
+  default     = null
 }
 
 variable "implied_description" {
-  default = null
+  description = "Description is implied from the pool tree name <parent>/<child> unless specified on the pool_config."
+  default     = null
+  type        = string
 }
 
-variable "address_family" {}
-variable "ipam_scope_id" {}
-variable "source_ipam_pool_id" {}
+variable "address_family" {
+  description = "IPv4/6 address family."
+  type        = string
+}
+
+variable "ipam_scope_id" {
+  description = "IPAM Scope ID to attach the pool to."
+  type        = string
+}
+
+variable "source_ipam_pool_id" {
+  description = "IPAM parent pool ID to attach the pool to."
+  type        = string
+}
