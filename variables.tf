@@ -20,3 +20,26 @@ variable "address_family" {
   type        = string
   default     = "ipv4"
 }
+
+variable "create_ipam" {
+  description = "Determines whether or not to create an IPAM. If `false` you must also provide a var.ipam_scope_id"
+  type        = bool
+  default     = true
+}
+
+variable "ipam_scope_id" {
+  description = "(Optional) Required if `var.ipam_id` is set. Which scope to deploy pools into."
+  type        = string
+  default     = null
+}
+
+variable "ipam_scope_type" {
+  description = "Which scope type to use. Valid inputs: `public`, `private`. You can alternatively provide your own scope id."
+  type        = string
+  default     = "private"
+
+  validation {
+    condition     = var.ipam_scope_type == "public" || var.ipam_scope_type == "private"
+    error_message = "Scope type must be either public or private."
+  }
+}
