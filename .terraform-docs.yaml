@@ -11,10 +11,6 @@ settings:
   sensitive: true
   type: true
 
-recursive:
-  enabled: true
-  path: modules
-
 sort:
   enabled: true
   by: required

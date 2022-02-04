@@ -43,3 +43,9 @@ variable "ipam_scope_type" {
     error_message = "Scope type must be either public or private."
   }
 }
+
+variable "cidr_allocations" {
+  description = "List of cidrs to block IPAM from allocating. Uses the `aws_vpc_ipam_pool_cidr_allocation` resource."
+  type        = list(string)
+  default     = null
+}

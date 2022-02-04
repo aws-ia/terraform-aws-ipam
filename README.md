@@ -58,7 +58,7 @@ IPAM operating\_region must be set for the primary region in your terraform prov
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 3.73.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 3.74.0 |
 
 ## Modules
 
@@ -75,6 +75,7 @@ IPAM operating\_region must be set for the primary region in your terraform prov
 | [aws_vpc_ipam.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_ipam) | resource |
 | [aws_vpc_ipam_pool.top](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_ipam_pool) | resource |
 | [aws_vpc_ipam_pool_cidr.top](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_ipam_pool_cidr) | resource |
+| [aws_vpc_ipam_pool_cidr_allocation.blocked](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_ipam_pool_cidr_allocation) | resource |
 | [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
 
 ## Inputs
@@ -83,6 +84,7 @@ IPAM operating\_region must be set for the primary region in your terraform prov
 |------|-------------|------|---------|:--------:|
 | <a name="input_ipam_configuration"></a> [ipam\_configuration](#input\_ipam\_configuration) | A multi-tier-nested map describing nested IPAM pools. Can nest up to 3 tiers with the top tier being outside the `ipam_configuration`. This attribute is quite complex, see README.md for further explanation. | `any` | n/a | yes |
 | <a name="input_address_family"></a> [address\_family](#input\_address\_family) | IPv4/6 address family. | `string` | `"ipv4"` | no |
+| <a name="input_cidr_allocations"></a> [cidr\_allocations](#input\_cidr\_allocations) | List of cidrs to block IPAM from allocating. Uses the `aws_vpc_ipam_pool_cidr_allocation` resource. | `list(string)` | `null` | no |
 | <a name="input_create_ipam"></a> [create\_ipam](#input\_create\_ipam) | Determines whether or not to create an IPAM. If `false` you must also provide a var.ipam\_scope\_id | `bool` | `true` | no |
 | <a name="input_ipam_scope_id"></a> [ipam\_scope\_id](#input\_ipam\_scope\_id) | (Optional) Required if `var.ipam_id` is set. Which scope to deploy pools into. | `string` | `null` | no |
 | <a name="input_ipam_scope_type"></a> [ipam\_scope\_type](#input\_ipam\_scope\_type) | Which scope type to use. Valid inputs: `public`, `private`. You can alternatively provide your own scope id. | `string` | `"private"` | no |

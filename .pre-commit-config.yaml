@@ -37,11 +37,11 @@ repos:
       # see https://github.com/antonbabenko/pre-commit-terraform#terraform_providers_lock
       - id: terraform_providers_lock
 
-      # see https://github.com/antonbabenko/pre-commit-terraform#terraform_tflint
-      - id: terraform_tflint
-        args:
-          - "--args=--config=.tflint.hcl"
+      # # see https://github.com/antonbabenko/pre-commit-terraform#terraform_tflint
+      # - id: terraform_tflint
+      #   args:
+      #     - "--args=--config=.tflint.hcl"
 
       - id: terraform_tfsec
         args:
-          - "--args=--custom-check-dir=.tfsec"
+          - "--args=--custom-check-dir=.tfsec --exclude-downloaded-modules"

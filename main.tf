@@ -51,6 +51,13 @@ resource "aws_vpc_ipam_pool_cidr" "top" {
   cidr         = var.top_cidr
 }
 
+resource "aws_vpc_ipam_pool_cidr_allocation" "blocked" {
+  for_each = toset(var.cidr_allocations)
+
+  ipam_pool_id = aws_vpc_ipam_pool.top.id
+  cidr         = each.key
+}
+
 module "tier_one" {
   source   = "./modules/sub_pool"
   for_each = var.ipam_configuration
