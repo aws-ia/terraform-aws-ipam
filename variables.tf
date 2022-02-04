@@ -1,6 +1,7 @@
-variable "ipam_configuration" {
-  description = "A multi-tier-nested map describing nested IPAM pools. Can nest up to 3 tiers with the top tier being outside the `ipam_configuration`. This attribute is quite complex, see README.md for further explanation."
-  type        = any #map(map(map(string)))
+variable "pool_configurations" {
+  description = "A multi-tier-nested map describing nested IPAM pools. Can nest up to 3 tiers with the top tier being outside the `pool_configurations`. This attribute is quite complex, see README.md for further explanation."
+  type        = any
+  default     = {}
 
   # its possible to write a pretty advanced validation here and its probably worth the time
   # validation {
@@ -10,8 +11,37 @@ variable "ipam_configuration" {
 }
 
 variable "top_cidr" {
-  description = "Top level cidr block"
+  description = "Top tier cidr blocks."
+  type        = list(string)
+}
+
+variable "top_ram_share_principals" {
+  description = "Principals to create RAM shares for top tier pool."
+  type        = list(string)
+  default     = null
+}
+
+variable "top_cidr_allocations" {
+  description = "cidr_allocations for top tier pool."
+  type        = list(string)
+  default     = []
+}
+
+variable "top_auto_import" {
+  description = "`auto_import` setting for top tier pool."
+  type        = bool
+  default     = null
+}
+
+variable "top_description" {
+  description = "Description of top tier pool."
   type        = string
+  default     = ""
+}
+
+variable "top_tags" {
+  description = "Tags for top tier pool."
+  type        = map(string)
   default     = null
 }
 
@@ -47,5 +77,5 @@ variable "ipam_scope_type" {
 variable "cidr_allocations" {
   description = "List of cidrs to block IPAM from allocating. Uses the `aws_vpc_ipam_pool_cidr_allocation` resource."
   type        = list(string)
-  default     = null
+  default     = []
 }

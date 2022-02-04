@@ -1,3 +1,3 @@
-variable "ipam_configuration" {
+variable "pool_configurations" {
 
 }
