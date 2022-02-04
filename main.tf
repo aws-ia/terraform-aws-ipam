@@ -10,16 +10,18 @@ locals {
     var.ipam_scope_type == "private" ? aws_vpc_ipam.main[0].private_default_scope_id : aws_vpc_ipam.main[0].public_default_scope_id
   ) : var.ipam_scope_id
 
-  tier_2_pool_names = flatten([for k, v in var.ipam_configuration : [for k2, _ in v.sub_pools : "${k}/${k2}"]])
+  # pool names in 2nd tier expressed as parent/child
+  tier_2_pool_names = compact(flatten([for k, v in var.ipam_configuration : try([for k2, _ in v.sub_pools : "${k}/${k2}"], null)]))
   # 3rd tier is optional, determine which tier 2 pools have 3rd tier
   tier_2_pool_names_with_3rd_tier = [for _, v in local.tier_2_pool_names : v if try(var.ipam_configuration[split("/", v)[0]].sub_pools[split("/", v)[1]].sub_pools, null) != null]
   tier_3_pool_names               = flatten([for _, v in local.tier_2_pool_names_with_3rd_tier : [for _, v2 in keys(var.ipam_configuration[split("/", v)[0]].sub_pools[split("/", v)[1]].sub_pools) : "${v}/${v2}"]])
 
   # find all unique values where key = locale
   all_locales = distinct(compact(flatten(concat([for k, v in var.ipam_configuration : try(v.locale, null)],
-    [for k, v in var.ipam_configuration : [for k2, v2 in v.sub_pools : try(v2.locale, null)]],
+    [for k, v in var.ipam_configuration : try([for k2, v2 in v.sub_pools : try(v2.locale, null)], null)],
     [for k, v in local.tier_3_pool_names : try(var.ipam_configuration[split("/", v)[0]].sub_pools[split("/", v)[1]].sub_pools[split("/", v)[2]].locale, null)]
   ))))
+
   # its possible to create pools in all regions except the primary, but we must pass the primary region
   # to aws_vpc_ipam.operating_regions.region_name
   operating_regions = distinct(concat(local.all_locales, [data.aws_region.current.name]))

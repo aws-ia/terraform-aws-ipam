@@ -1,6 +1,7 @@
 variable "ipam_configuration" {
   description = "A multi-tier-nested map describing nested IPAM pools. Can nest up to 3 tiers with the top tier being outside the `ipam_configuration`. This attribute is quite complex, see README.md for further explanation."
-  type        = any #map(map(map(string)))
+  type        = any
+  default     = {}
 
   # its possible to write a pretty advanced validation here and its probably worth the time
   # validation {
@@ -47,5 +48,5 @@ variable "ipam_scope_type" {
 variable "cidr_allocations" {
   description = "List of cidrs to block IPAM from allocating. Uses the `aws_vpc_ipam_pool_cidr_allocation` resource."
   type        = list(string)
-  default     = null
+  default     = []
 }
