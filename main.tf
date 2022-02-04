@@ -11,15 +11,15 @@ locals {
   ) : var.ipam_scope_id
 
   # pool names in 2nd tier expressed as parent/child
-  tier_2_pool_names = compact(flatten([for k, v in var.ipam_configuration : try([for k2, _ in v.sub_pools : "${k}/${k2}"], null)]))
+  tier_2_pool_names = compact(flatten([for k, v in var.pool_configurations : try([for k2, _ in v.sub_pools : "${k}/${k2}"], null)]))
   # 3rd tier is optional, determine which tier 2 pools have 3rd tier
-  tier_2_pool_names_with_3rd_tier = [for _, v in local.tier_2_pool_names : v if try(var.ipam_configuration[split("/", v)[0]].sub_pools[split("/", v)[1]].sub_pools, null) != null]
-  tier_3_pool_names               = flatten([for _, v in local.tier_2_pool_names_with_3rd_tier : [for _, v2 in keys(var.ipam_configuration[split("/", v)[0]].sub_pools[split("/", v)[1]].sub_pools) : "${v}/${v2}"]])
+  tier_2_pool_names_with_3rd_tier = [for _, v in local.tier_2_pool_names : v if try(var.pool_configurations[split("/", v)[0]].sub_pools[split("/", v)[1]].sub_pools, null) != null]
+  tier_3_pool_names               = flatten([for _, v in local.tier_2_pool_names_with_3rd_tier : [for _, v2 in keys(var.pool_configurations[split("/", v)[0]].sub_pools[split("/", v)[1]].sub_pools) : "${v}/${v2}"]])
 
   # find all unique values where key = locale
-  all_locales = distinct(compact(flatten(concat([for k, v in var.ipam_configuration : try(v.locale, null)],
-    [for k, v in var.ipam_configuration : try([for k2, v2 in v.sub_pools : try(v2.locale, null)], null)],
-    [for k, v in local.tier_3_pool_names : try(var.ipam_configuration[split("/", v)[0]].sub_pools[split("/", v)[1]].sub_pools[split("/", v)[2]].locale, null)]
+  all_locales = distinct(compact(flatten(concat([for k, v in var.pool_configurations : try(v.locale, null)],
+    [for k, v in var.pool_configurations : try([for k2, v2 in v.sub_pools : try(v2.locale, null)], null)],
+    [for k, v in local.tier_3_pool_names : try(var.pool_configurations[split("/", v)[0]].sub_pools[split("/", v)[1]].sub_pools[split("/", v)[2]].locale, null)]
   ))))
 
   # its possible to create pools in all regions except the primary, but we must pass the primary region
@@ -42,37 +42,53 @@ resource "aws_vpc_ipam" "main" {
   }
 }
 
-# TODO optional IPAM, byoipam_id
-resource "aws_vpc_ipam_pool" "top" {
-  address_family = "ipv4"
-  ipam_scope_id  = local.scope_id
-}
+# resource "aws_vpc_ipam_pool" "top" {
+#   address_family = "ipv4"
+#   ipam_scope_id  = local.scope_id
+# }
 
-resource "aws_vpc_ipam_pool_cidr" "top" {
-  ipam_pool_id = aws_vpc_ipam_pool.top.id
-  cidr         = var.top_cidr
-}
+# resource "aws_vpc_ipam_pool_cidr" "top" {
+#   ipam_pool_id = aws_vpc_ipam_pool.top.id
+#   cidr         = var.top_cidr
+# }
 
-resource "aws_vpc_ipam_pool_cidr_allocation" "blocked" {
-  for_each = toset(var.cidr_allocations)
-
-  ipam_pool_id = aws_vpc_ipam_pool.top.id
-  cidr         = each.key
-}
-
-module "tier_one" {
-  source   = "./modules/sub_pool"
-  for_each = var.ipam_configuration
+module "tier_zero" {
+  source = "./modules/sub_pool"
 
   address_family      = var.address_family
   ipam_scope_id       = local.scope_id
-  source_ipam_pool_id = aws_vpc_ipam_pool.top.id
+  source_ipam_pool_id = null
 
-  pool_config         = var.ipam_configuration[each.key]
+  pool_config = {
+    cidr                 = var.top_cidr
+    ram_share_principals = var.top_ram_share_principals
+    cidr_allocations     = var.top_cidr_allocations
+    auto_import          = var.top_auto_import
+    description          = var.top_description
+    tags                 = {}
+  }
+}
+
+# resource "aws_vpc_ipam_pool_cidr_allocation" "blocked" {
+#   for_each = toset(var.cidr_allocations)
+
+#   ipam_pool_id = aws_vpc_ipam_pool.top.id
+#   cidr         = each.key
+# }
+
+module "tier_one" {
+  source   = "./modules/sub_pool"
+  for_each = var.pool_configurations
+
+  address_family      = var.address_family
+  ipam_scope_id       = local.scope_id
+  source_ipam_pool_id = module.tier_zero.pool.id
+
+  pool_config         = var.pool_configurations[each.key]
   implied_description = each.key
 
   depends_on = [
-    aws_vpc_ipam_pool_cidr.top
+    module.tier_zero
   ]
 }
 
@@ -84,7 +100,7 @@ module "tier_two" {
   ipam_scope_id       = local.scope_id
   source_ipam_pool_id = module.tier_one[split("/", each.key)[0]].pool.id
 
-  pool_config         = var.ipam_configuration[split("/", each.key)[0]].sub_pools[split("/", each.key)[1]]
+  pool_config         = var.pool_configurations[split("/", each.key)[0]].sub_pools[split("/", each.key)[1]]
   implied_locale      = module.tier_one[split("/", each.key)[0]].pool.locale
   implied_description = each.key
 
@@ -104,7 +120,7 @@ module "tier_three" {
     join("/", [split("/", each.key)[0], split("/", each.key)[1]])
   ].pool.id
 
-  pool_config = var.ipam_configuration[split("/", each.key)[0]].sub_pools[split("/", each.key)[1]].sub_pools[split("/", each.key)[2]]
+  pool_config = var.pool_configurations[split("/", each.key)[0]].sub_pools[split("/", each.key)[1]].sub_pools[split("/", each.key)[2]]
 
   implied_locale = module.tier_two[
     join("/", [split("/", each.key)[0], split("/", each.key)[1]])
