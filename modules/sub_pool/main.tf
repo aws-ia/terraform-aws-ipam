@@ -1,6 +1,5 @@
 locals {
-  description      = var.pool_config.description == null ? var.implied_description : var.pool_config.description
-  cidr_allocations = var.pool_config.cidr_allocations == null ? [] : var.pool_config.cidr_allocations
+  description = var.pool_config.description == null ? var.implied_description : var.pool_config.description
 }
 
 resource "aws_vpc_ipam_pool" "sub" {
@@ -34,17 +33,6 @@ resource "aws_vpc_ipam_pool_cidr" "sub" {
       signature = cidr_authorization_context.signature
     }
   }
-}
-
-resource "aws_vpc_ipam_pool_cidr_allocation" "sub" {
-  for_each = toset(local.cidr_allocations)
-
-  ipam_pool_id = aws_vpc_ipam_pool.sub.id
-  cidr         = each.key
-
-  depends_on = [
-    aws_vpc_ipam_pool_cidr.sub
-  ]
 }
 
 resource "aws_ram_resource_share" "sub" {

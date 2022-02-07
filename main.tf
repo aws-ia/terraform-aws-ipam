@@ -42,16 +42,6 @@ resource "aws_vpc_ipam" "main" {
   }
 }
 
-# resource "aws_vpc_ipam_pool" "top" {
-#   address_family = "ipv4"
-#   ipam_scope_id  = local.scope_id
-# }
-
-# resource "aws_vpc_ipam_pool_cidr" "top" {
-#   ipam_pool_id = aws_vpc_ipam_pool.top.id
-#   cidr         = var.top_cidr
-# }
-
 module "tier_zero" {
   source = "./modules/sub_pool"
 
@@ -62,19 +52,11 @@ module "tier_zero" {
   pool_config = {
     cidr                 = var.top_cidr
     ram_share_principals = var.top_ram_share_principals
-    cidr_allocations     = var.top_cidr_allocations
     auto_import          = var.top_auto_import
     description          = var.top_description
     tags                 = {}
   }
 }
-
-# resource "aws_vpc_ipam_pool_cidr_allocation" "blocked" {
-#   for_each = toset(var.cidr_allocations)
-
-#   ipam_pool_id = aws_vpc_ipam_pool.top.id
-#   cidr         = each.key
-# }
 
 module "tier_one" {
   source   = "./modules/sub_pool"

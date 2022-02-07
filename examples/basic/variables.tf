@@ -1,3 +1,1 @@
-variable "pool_configurations" {
-
-}
+variable "pool_configurations" {}

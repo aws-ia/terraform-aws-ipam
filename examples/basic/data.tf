@@ -1,7 +1,11 @@
 locals {
-  dev_ou_arn = one([
+  sandbox_ou_arn = one([
     for _, ou in data.aws_organizations_organizational_units.ou.children[*] :
-    ou.arn if ou.name == "dev"
+    ou.arn if ou.name == "sandbox"
+  ])
+  prod_ou_arn = one([
+    for _, ou in data.aws_organizations_organizational_units.ou.children[*] :
+    ou.arn if ou.name == "prod"
   ])
 }
 

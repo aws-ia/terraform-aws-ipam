@@ -1,40 +1,37 @@
+# This configuration is:
+# top non-regional tier
+# 2nd top regional tier
+# 3rd environment specific tier
+# 4th business units
+
 module "basic" {
   source = "../.."
 
   top_cidr = ["10.0.0.0/8"]
 
-  # block IPAM from using these CIDRS
-  # cidr_allocations = ["10.0.64.0/20"]
-
   pool_configurations = {
-    us-east-1 = {
-      description      = "us-east-1 top level pool"
-      cidr             = ["10.0.0.0/16"]
-      locale           = "us-east-1"
-      cidr_allocations = ["10.0.64.0/20"]
-
-      # allocation_min_netmask_length = 16
-      # allocation_default_netmask_length = 16
+    us-west-2 = {
+      description = "us-west-2 top level pool"
+      cidr        = ["10.0.0.0/16"]
+      locale      = "us-west-2"
 
       sub_pools = {
 
         sandbox = {
-          cidr = ["10.0.48.0/20"]
-          # allocation_max_netmask_length     = 28
-          # allocation_default_netmask_length = 28
-          ram_share_principals = [local.dev_ou_arn]
+          cidr                 = ["10.0.48.0/20"]
+          ram_share_principals = [local.sandbox_ou_arn]
         }
 
         prod = {
           cidr = ["10.0.32.0/20"]
 
           sub_pools = {
-            app_team_a = {
-              cidr = ["10.0.32.0/28"]
-
+            team_a = {
+              cidr                 = ["10.0.32.0/28"]
               ram_share_principals = ["601584510932"] # prod account
             }
-            app_team_b = {
+
+            team_b = {
               cidr                 = ["10.0.32.32/28"]
               ram_share_principals = ["601584510932"] # prod account
             }
@@ -42,11 +39,22 @@ module "basic" {
         }
       }
     }
-    us-west-2 = {
-      cidr = ["10.1.0.0/16"]
+    us-east-1 = {
+      cidr   = ["10.1.0.0/16"]
+      locale = "us-east-1"
 
+      sub_pools = {
+
+        team_a = {
+          cidr                 = ["10.1.48.0/20"]
+          ram_share_principals = [local.prod_ou_arn]
+        }
+
+        team_b = {
+          cidr                 = ["10.1.64.0/20"]
+          ram_share_principals = [local.prod_ou_arn]
+        }
+      }
     }
-
   }
-
 }
