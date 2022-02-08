@@ -1,3 +1,4 @@
+<!-- BEGIN_TF_DOCS -->
 ## Pool Design
 
 The example code shows you how to deploy IPAM with pools in 2 regions. The company primarily uses `us-west-2`. It has a sandbox pool that is shared to a sandbox OU where any developer can get their own account. It also has a dev pool that further sub-divides into business units. The prod pool also sub-divides into business units.
@@ -15,9 +16,7 @@ The example code shows you how to deploy IPAM with pools in 2 regions. The compa
 
 ## Providers
 
-| Name | Version |
-|------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 3.74.0 |
+No providers.
 
 ## Modules
 
@@ -27,17 +26,18 @@ The example code shows you how to deploy IPAM with pools in 2 regions. The compa
 
 ## Resources
 
-| Name | Type |
-|------|------|
-| [aws_organizations_organization.org](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/organizations_organization) | data source |
-| [aws_organizations_organizational_units.ou](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/organizations_organizational_units) | data source |
+No resources.
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_dev_ou_arn"></a> [dev\_ou\_arn](#input\_dev\_ou\_arn) | arn of ou to share to dev accounts | `any` | n/a | yes |
 | <a name="input_pool_configurations"></a> [pool\_configurations](#input\_pool\_configurations) | n/a | `any` | n/a | yes |
+| <a name="input_prod_account"></a> [prod\_account](#input\_prod\_account) | Used for testing, prod account id | `any` | n/a | yes |
+| <a name="input_prod_ou_arn"></a> [prod\_ou\_arn](#input\_prod\_ou\_arn) | arn of ou to share to prod accounts | `any` | n/a | yes |
 
 ## Outputs
 
 No outputs.
+<!-- END_TF_DOCS -->

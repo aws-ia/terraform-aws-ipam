@@ -1,8 +1,4 @@
-# This configuration is:
-# top non-regional tier
-# 2nd top regional tier
-# 3rd environment specific tier
-# 4th business units
+# This configuration is described in README.md
 
 module "basic" {
   source = "../.."
@@ -19,7 +15,7 @@ module "basic" {
 
         sandbox = {
           cidr                 = ["10.0.48.0/20"]
-          ram_share_principals = [local.sandbox_ou_arn]
+          ram_share_principals = [var.dev_ou_arn]
         }
 
         prod = {
@@ -28,12 +24,12 @@ module "basic" {
           sub_pools = {
             team_a = {
               cidr                 = ["10.0.32.0/28"]
-              ram_share_principals = ["601584510932"] # prod account
+              ram_share_principals = [var.prod_account] # prod account
             }
 
             team_b = {
               cidr                 = ["10.0.32.32/28"]
-              ram_share_principals = ["601584510932"] # prod account
+              ram_share_principals = [var.prod_account] # prod account
             }
           }
         }
@@ -47,12 +43,12 @@ module "basic" {
 
         team_a = {
           cidr                 = ["10.1.48.0/20"]
-          ram_share_principals = [local.prod_ou_arn]
+          ram_share_principals = [var.prod_ou_arn]
         }
 
         team_b = {
           cidr                 = ["10.1.64.0/20"]
-          ram_share_principals = [local.prod_ou_arn]
+          ram_share_principals = [var.prod_ou_arn]
         }
       }
     }
