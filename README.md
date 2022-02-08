@@ -1,7 +1,7 @@
 <!-- BEGIN_TF_DOCS -->
 # AWS IP Address Manager Deployment Module
 
-This module can deploy simple or complex AWS IPAM configurations. It is designed to flexible for many different use cases. The Most common use cases / IPAM designs are highlighted in the [examples/](./examples/) directory. Below is a representation of a symmetrically nested, multi-region deployment that is possible; its also represented in code in [examples/basic](examples/basic). But its also possible to do [asymmetically nested deployments](images/asymmetrical\_pool\_structure.png) as well.
+This module can deploy simple or complex AWS IPAM configurations. It is designed to flexible for many different use cases. The Most common use cases / IPAM designs are highlighted in the [examples/](./examples/) directory. Below is a representation of a symmetrically nested, multi-region deployment that is possible; Its also possible to do [asymmetically nested deployments](images/asymmetrical\_pool\_structure.png) as well which we have as an [example](./examples/basic).
 
 ## Possible Symmetically Nested Pool Structure
 
