@@ -18,6 +18,18 @@ variable "pool_config" {
 
     sub_pools = optional(any)
   })
+
+  # Not currently used due to:
+  # https://github.com/hashicorp/terraform/issues/29204#issuecomment-1034076226
+  # validation {
+  #   condition = alltrue([ for _, k in keys(var.pool_config) :
+  #     contains(["cidr", "locale", "ram_share_principals", "auto_import", "aws_service", "description",
+  #               "publicly_advertisable", "allocation_resource_tags", "tags", "cidr_authorization_context",
+  #                "sub_pools", "allocation_default_netmask_length", "allocation_max_netmask_length",
+  #                "allocation_min_netmask_length"], k) ])
+
+  #   error_message = "Can only accept certain parameters. See modules/sub_pool/variables.tf for `pool_config` options."
+  # }
 }
 
 variable "implied_locale" {
