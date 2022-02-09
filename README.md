@@ -9,11 +9,11 @@ This module can deploy simple or complex AWS IP Address Manager (IPAM) configura
 
 ## Configuration via the `var.pool_configurations` variable
 
-This module leans heavily on the variable `var.pool_configurations` which is a multi-tier nested map that describes exactly how you want your ipam pools to be nested. It can accept most `aws_vpc_ipam_pool` & `aws_vpc_ipam_pool_cidr` attributes (detailed below) as well as RAM share pools (at any tier) to valid AWS principals. **Nested pools do not inherit attributes from their Source pool(s)** so all configuration options are available at each "tier".
+This module leans heavily on the variable `var.pool_configurations` which is a multi-level nested map that describes exactly how you want your ipam pools to be nested. It can accept most `aws_vpc_ipam_pool` & `aws_vpc_ipam_pool_cidr` attributes (detailed below) as well as RAM share pools (at any level) to valid AWS principals. **Nested pools do not inherit attributes from their Source pool(s)** so all configuration options are available at each "level".
 
-In this module pools can be nested up to 4 tiers deep, 1 root pool + up to 3 nested pools. The root pool defines that `address_family`; If you want to deploy an IPv4 & IPv6 pool structure, you must instantiate the module for each type.
+In this module pools can be nested up to 4 levels deep, 1 root pool + up to 3 nested pools. The root pool defines that `address_family`; If you want to deploy an IPv4 & IPv6 pool structure, you must instantiate the module for each type.
 
-The `pool_configurations` variable is the structure of the other 3 tiers. The sub-module sub\_pool has a variable [var.pool\_config](./modules/sub\_pool/variables.tf#L1) that defines the structure that each pool can accept.
+The `pool_configurations` variable is the structure of the other 3 levels. The sub-module sub\_pool has a variable [var.pool\_config](./modules/sub\_pool/variables.tf#L1) that defines the structure that each pool can accept.
 
 The structure of the variable is:
 
@@ -81,13 +81,13 @@ IPAM operating\_region must be set for the primary region in your terraform prov
 
 ## Importing at Multiple Levels (examples)
 
-**tier 0 pool**: `terraform import module.basic.module.tier_zero.aws_vpc_ipam_pool.sub ipam-pool-<>`
+**level 0 pool**: `terraform import module.basic.module.level_zero.aws_vpc_ipam_pool.sub ipam-pool-<>`
 
-**tier 1 pool**: `terraform import module.basic.module.tier_one["<>"].aws_vpc_ipam_pool.sub ipam-pool-<>`
+**level 1 pool**: `terraform import module.basic.module.level_one["<>"].aws_vpc_ipam_pool.sub ipam-pool-<>`
 
-**tier 2 pool**: `terraform import module.basic.module.tier_two["<>/<>"].aws_vpc_ipam_pool.sub ipam-pool-<>`
+**level 2 pool**: `terraform import module.basic.module.level_two["<>/<>"].aws_vpc_ipam_pool.sub ipam-pool-<>`
 
-**tier 3 pool**: `terraform import module.basic.module.tier_three["<>/<>/<>"].aws_vpc_ipam_pool.sub ipam-pool-<>`
+**level 3 pool**: `terraform import module.basic.module.level_three["<>/<>/<>"].aws_vpc_ipam_pool.sub ipam-pool-<>`
 
 ## Requirements
 
@@ -106,10 +106,10 @@ IPAM operating\_region must be set for the primary region in your terraform prov
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_tier_one"></a> [tier\_one](#module\_tier\_one) | ./modules/sub_pool | n/a |
-| <a name="module_tier_three"></a> [tier\_three](#module\_tier\_three) | ./modules/sub_pool | n/a |
-| <a name="module_tier_two"></a> [tier\_two](#module\_tier\_two) | ./modules/sub_pool | n/a |
-| <a name="module_tier_zero"></a> [tier\_zero](#module\_tier\_zero) | ./modules/sub_pool | n/a |
+| <a name="module_level_one"></a> [level\_one](#module\_level\_one) | ./modules/sub_pool | n/a |
+| <a name="module_level_three"></a> [level\_three](#module\_level\_three) | ./modules/sub_pool | n/a |
+| <a name="module_level_two"></a> [level\_two](#module\_level\_two) | ./modules/sub_pool | n/a |
+| <a name="module_level_zero"></a> [level\_zero](#module\_level\_zero) | ./modules/sub_pool | n/a |
 
 ## Resources
 
@@ -122,18 +122,18 @@ IPAM operating\_region must be set for the primary region in your terraform prov
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_top_cidr"></a> [top\_cidr](#input\_top\_cidr) | Top tier cidr blocks. | `list(string)` | n/a | yes |
+| <a name="input_top_cidr"></a> [top\_cidr](#input\_top\_cidr) | Top level cidr blocks. | `list(string)` | n/a | yes |
 | <a name="input_address_family"></a> [address\_family](#input\_address\_family) | IPv4/6 address family. | `string` | `"ipv4"` | no |
 | <a name="input_cidr_allocations"></a> [cidr\_allocations](#input\_cidr\_allocations) | List of cidrs to block IPAM from allocating. Uses the `aws_vpc_ipam_pool_cidr_allocation` resource. | `list(string)` | `[]` | no |
 | <a name="input_create_ipam"></a> [create\_ipam](#input\_create\_ipam) | Determines whether or not to create an IPAM. If `false` you must also provide a var.ipam\_scope\_id | `bool` | `true` | no |
 | <a name="input_ipam_scope_id"></a> [ipam\_scope\_id](#input\_ipam\_scope\_id) | (Optional) Required if `var.ipam_id` is set. Which scope to deploy pools into. | `string` | `null` | no |
 | <a name="input_ipam_scope_type"></a> [ipam\_scope\_type](#input\_ipam\_scope\_type) | Which scope type to use. Valid inputs: `public`, `private`. You can alternatively provide your own scope id. | `string` | `"private"` | no |
-| <a name="input_pool_configurations"></a> [pool\_configurations](#input\_pool\_configurations) | A multi-tier-nested map describing nested IPAM pools. Can nest up to 3 tiers with the top tier being outside the `pool_configurations`. This attribute is quite complex, see README.md for further explanation. | `any` | `{}` | no |
-| <a name="input_top_auto_import"></a> [top\_auto\_import](#input\_top\_auto\_import) | `auto_import` setting for top tier pool. | `bool` | `null` | no |
-| <a name="input_top_cidr_allocations"></a> [top\_cidr\_allocations](#input\_top\_cidr\_allocations) | cidr\_allocations for top tier pool. | `list(string)` | `[]` | no |
-| <a name="input_top_description"></a> [top\_description](#input\_top\_description) | Description of top tier pool. | `string` | `""` | no |
-| <a name="input_top_ram_share_principals"></a> [top\_ram\_share\_principals](#input\_top\_ram\_share\_principals) | Principals to create RAM shares for top tier pool. | `list(string)` | `null` | no |
-| <a name="input_top_tags"></a> [top\_tags](#input\_top\_tags) | Tags for top tier pool. | `map(string)` | `null` | no |
+| <a name="input_pool_configurations"></a> [pool\_configurations](#input\_pool\_configurations) | A multi-level-nested map describing nested IPAM pools. Can nest up to 3 levels with the top level being outside the `pool_configurations`. This attribute is quite complex, see README.md for further explanation. | `any` | `{}` | no |
+| <a name="input_top_auto_import"></a> [top\_auto\_import](#input\_top\_auto\_import) | `auto_import` setting for top level pool. | `bool` | `null` | no |
+| <a name="input_top_cidr_allocations"></a> [top\_cidr\_allocations](#input\_top\_cidr\_allocations) | cidr\_allocations for top level pool. | `list(string)` | `[]` | no |
+| <a name="input_top_description"></a> [top\_description](#input\_top\_description) | Description of top level pool. | `string` | `""` | no |
+| <a name="input_top_ram_share_principals"></a> [top\_ram\_share\_principals](#input\_top\_ram\_share\_principals) | Principals to create RAM shares for top level pool. | `list(string)` | `null` | no |
+| <a name="input_top_tags"></a> [top\_tags](#input\_top\_tags) | Tags for top level pool. | `map(string)` | `null` | no |
 
 ## Outputs
 
