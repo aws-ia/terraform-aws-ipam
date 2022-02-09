@@ -1,6 +1,7 @@
 package test
 
 import (
+	"fmt"
 	"os"
 	"testing"
 
@@ -8,6 +9,11 @@ import (
 )
 
 func TestExamplesBasic(t *testing.T) {
+	if os.Getenv("TEST_ACCOUNT") == "" || os.Getenv("DEV_OU_ARN") == "" || os.Getenv("PROD_OU_ARN") == "" {
+		fmt.Println("Must set environment variables.")
+		os.Exit(1)
+	}
+
 	test_account_id := os.Getenv("TEST_ACCOUNT")
 	dev_ou_arn := os.Getenv("DEV_OU_ARN")
 	prod_ou_arn := os.Getenv("PROD_OU_ARN")

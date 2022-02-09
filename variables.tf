@@ -1,5 +1,5 @@
 variable "pool_configurations" {
-  description = "A multi-tier-nested map describing nested IPAM pools. Can nest up to 3 tiers with the top tier being outside the `pool_configurations`. This attribute is quite complex, see README.md for further explanation."
+  description = "A multi-level-nested map describing nested IPAM pools. Can nest up to 3 levels with the top level being outside the `pool_configurations`. This attribute is quite complex, see README.md for further explanation."
   type        = any
   default     = {}
 
@@ -11,36 +11,36 @@ variable "pool_configurations" {
 }
 
 variable "top_cidr" {
-  description = "Top tier cidr blocks."
+  description = "Top level cidr blocks."
   type        = list(string)
 }
 
 variable "top_ram_share_principals" {
-  description = "Principals to create RAM shares for top tier pool."
+  description = "Principals to create RAM shares for top level pool."
   type        = list(string)
   default     = null
 }
 
 variable "top_cidr_allocations" {
-  description = "cidr_allocations for top tier pool."
+  description = "cidr_allocations for top level pool."
   type        = list(string)
   default     = []
 }
 
 variable "top_auto_import" {
-  description = "`auto_import` setting for top tier pool."
+  description = "`auto_import` setting for top level pool."
   type        = bool
   default     = null
 }
 
 variable "top_description" {
-  description = "Description of top tier pool."
+  description = "Description of top level pool."
   type        = string
   default     = ""
 }
 
 variable "top_tags" {
-  description = "Tags for top tier pool."
+  description = "Tags for top level pool."
   type        = map(string)
   default     = null
 }
