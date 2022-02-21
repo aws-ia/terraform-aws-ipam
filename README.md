@@ -100,7 +100,7 @@ IPAM operating\_region must be set for the primary region in your terraform prov
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 3.74.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.2.0 |
 
 ## Modules
 
