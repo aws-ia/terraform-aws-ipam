@@ -12,7 +12,7 @@ The example code shows you how to deploy IPAM with pools in 2 regions. The compa
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.15.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 3.72.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 3.73.0 |
 
 ## Providers
 
