@@ -10,6 +10,7 @@ locals {
     var.ipam_scope_type == "private" ? aws_vpc_ipam.main[0].private_default_scope_id : aws_vpc_ipam.main[0].public_default_scope_id
   ) : var.ipam_scope_id
 
+  level_1_pool_names = [for k, v in var.pool_configurations : k]
   # pool names in 2nd level expressed as parent/child
   level_2_pool_names = compact(flatten([for k, v in var.pool_configurations : try([for k2, _ in v.sub_pools : "${k}/${k2}"], null)]))
   # 3rd level is optional, determine which level 2 pools have 3rd level

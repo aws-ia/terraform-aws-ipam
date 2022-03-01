@@ -21,12 +21,6 @@ variable "top_ram_share_principals" {
   default     = null
 }
 
-variable "top_cidr_allocations" {
-  description = "cidr_allocations for top level pool."
-  type        = list(string)
-  default     = []
-}
-
 variable "top_auto_import" {
   description = "`auto_import` setting for top level pool."
   type        = bool
@@ -37,12 +31,6 @@ variable "top_description" {
   description = "Description of top level pool."
   type        = string
   default     = ""
-}
-
-variable "top_tags" {
-  description = "Tags for top level pool."
-  type        = map(string)
-  default     = null
 }
 
 variable "address_family" {
@@ -72,10 +60,4 @@ variable "ipam_scope_type" {
     condition     = var.ipam_scope_type == "public" || var.ipam_scope_type == "private"
     error_message = "Scope type must be either public or private."
   }
-}
-
-variable "cidr_allocations" {
-  description = "List of cidrs to block IPAM from allocating. Uses the `aws_vpc_ipam_pool_cidr_allocation` resource."
-  type        = list(string)
-  default     = []
 }

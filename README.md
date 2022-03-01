@@ -100,7 +100,7 @@ IPAM operating\_region must be set for the primary region in your terraform prov
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.2.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.3.0 |
 
 ## Modules
 
@@ -124,20 +124,22 @@ IPAM operating\_region must be set for the primary region in your terraform prov
 |------|-------------|------|---------|:--------:|
 | <a name="input_top_cidr"></a> [top\_cidr](#input\_top\_cidr) | Top level cidr blocks. | `list(string)` | n/a | yes |
 | <a name="input_address_family"></a> [address\_family](#input\_address\_family) | IPv4/6 address family. | `string` | `"ipv4"` | no |
-| <a name="input_cidr_allocations"></a> [cidr\_allocations](#input\_cidr\_allocations) | List of cidrs to block IPAM from allocating. Uses the `aws_vpc_ipam_pool_cidr_allocation` resource. | `list(string)` | `[]` | no |
 | <a name="input_create_ipam"></a> [create\_ipam](#input\_create\_ipam) | Determines whether or not to create an IPAM. If `false` you must also provide a var.ipam\_scope\_id | `bool` | `true` | no |
 | <a name="input_ipam_scope_id"></a> [ipam\_scope\_id](#input\_ipam\_scope\_id) | (Optional) Required if `var.ipam_id` is set. Which scope to deploy pools into. | `string` | `null` | no |
 | <a name="input_ipam_scope_type"></a> [ipam\_scope\_type](#input\_ipam\_scope\_type) | Which scope type to use. Valid inputs: `public`, `private`. You can alternatively provide your own scope id. | `string` | `"private"` | no |
 | <a name="input_pool_configurations"></a> [pool\_configurations](#input\_pool\_configurations) | A multi-level-nested map describing nested IPAM pools. Can nest up to 3 levels with the top level being outside the `pool_configurations`. This attribute is quite complex, see README.md for further explanation. | `any` | `{}` | no |
 | <a name="input_top_auto_import"></a> [top\_auto\_import](#input\_top\_auto\_import) | `auto_import` setting for top level pool. | `bool` | `null` | no |
-| <a name="input_top_cidr_allocations"></a> [top\_cidr\_allocations](#input\_top\_cidr\_allocations) | cidr\_allocations for top level pool. | `list(string)` | `[]` | no |
 | <a name="input_top_description"></a> [top\_description](#input\_top\_description) | Description of top level pool. | `string` | `""` | no |
 | <a name="input_top_ram_share_principals"></a> [top\_ram\_share\_principals](#input\_top\_ram\_share\_principals) | Principals to create RAM shares for top level pool. | `list(string)` | `null` | no |
-| <a name="input_top_tags"></a> [top\_tags](#input\_top\_tags) | Tags for top level pool. | `map(string)` | `null` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
 | <a name="output_operating_regions"></a> [operating\_regions](#output\_operating\_regions) | List of all IPAM operating regions. |
+| <a name="output_pool_level_0"></a> [pool\_level\_0](#output\_pool\_level\_0) | Map of all pools at level 0. |
+| <a name="output_pool_names"></a> [pool\_names](#output\_pool\_names) | List of all pool names. |
+| <a name="output_pools_level_1"></a> [pools\_level\_1](#output\_pools\_level\_1) | Map of all pools at level 1. |
+| <a name="output_pools_level_2"></a> [pools\_level\_2](#output\_pools\_level\_2) | Map of all pools at level 2. |
+| <a name="output_pools_level_3"></a> [pools\_level\_3](#output\_pools\_level\_3) | Map of all pools at level 3. |
 <!-- END_TF_DOCS -->
