@@ -17,7 +17,8 @@ resource "aws_vpc_ipam_pool" "sub" {
   aws_service                       = var.pool_config.aws_service
   publicly_advertisable             = var.pool_config.publicly_advertisable
 
-  tags = var.pool_config.tags
+  tags = merge(var.pool_config.tags,
+  { Name = var.implied_name })
 }
 
 resource "aws_vpc_ipam_pool_cidr" "sub" {
@@ -27,10 +28,10 @@ resource "aws_vpc_ipam_pool_cidr" "sub" {
   cidr         = each.key
 
   dynamic "cidr_authorization_context" {
-    for_each = var.pool_config.cidr_authorization_context == null ? {} : var.pool_config.cidr_authorization_context
+    for_each = var.pool_config.cidr_authorization_context == null ? [] : [1]
     content {
-      message   = cidr_authorization_context.message
-      signature = cidr_authorization_context.signature
+      message   = var.pool_config.cidr_authorization_context.message
+      signature = var.pool_config.cidr_authorization_context.signature
     }
   }
 }

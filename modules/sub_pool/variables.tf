@@ -1,4 +1,6 @@
 variable "pool_config" {
+  description = "Configuration of the Pool you want to deploy. All aws_vpc_ipam_pool arguments are available as well as ram_share_principals list and sub_pools map (up to 3 levels)."
+
   type = object({
     cidr                 = list(string)
     ram_share_principals = optional(list(string))
@@ -10,6 +12,7 @@ variable "pool_config" {
     auto_import                       = optional(string)
     aws_service                       = optional(string)
     description                       = optional(string)
+    name                              = optional(string)
     publicly_advertisable             = optional(bool)
 
     allocation_resource_tags   = optional(map(string))
@@ -18,18 +21,6 @@ variable "pool_config" {
 
     sub_pools = optional(any)
   })
-
-  # Not currently used due to:
-  # https://github.com/hashicorp/terraform/issues/29204#issuecomment-1034076226
-  # validation {
-  #   condition = alltrue([ for _, k in keys(var.pool_config) :
-  #     contains(["cidr", "locale", "ram_share_principals", "auto_import", "aws_service", "description",
-  #               "publicly_advertisable", "allocation_resource_tags", "tags", "cidr_authorization_context",
-  #                "sub_pools", "allocation_default_netmask_length", "allocation_max_netmask_length",
-  #                "allocation_min_netmask_length"], k) ])
-
-  #   error_message = "Can only accept certain parameters. See modules/sub_pool/variables.tf for `pool_config` options."
-  # }
 }
 
 variable "implied_locale" {
@@ -40,6 +31,12 @@ variable "implied_locale" {
 
 variable "implied_description" {
   description = "Description is implied from the pool tree name <parent>/<child> unless specified on the pool_config."
+  default     = null
+  type        = string
+}
+
+variable "implied_name" {
+  description = "Name is implied from the pool tree name <parent>/<child> unless specified on the pool_config."
   default     = null
   type        = string
 }

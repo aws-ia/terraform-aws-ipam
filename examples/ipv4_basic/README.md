@@ -5,7 +5,7 @@ The example code shows you how to deploy IPAM with pools in 2 regions. The compa
 
 `us-east-1` is only used as a replicated prod and sub-divides into the same business unit pools as `us-west-2` prod.
 
-![Basic pool structure](../../images/examples\_basic.png "Region Separated Pools")
+![Basic pool structure](../../images/asymmetrical\_example.png "Region Separated Pools")
 
 ## Requirements
 
@@ -32,12 +32,13 @@ No resources.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_dev_ou_arn"></a> [dev\_ou\_arn](#input\_dev\_ou\_arn) | arn of ou to share to dev accounts | `any` | n/a | yes |
-| <a name="input_pool_configurations"></a> [pool\_configurations](#input\_pool\_configurations) | n/a | `any` | n/a | yes |
-| <a name="input_prod_account"></a> [prod\_account](#input\_prod\_account) | Used for testing, prod account id | `any` | n/a | yes |
-| <a name="input_prod_ou_arn"></a> [prod\_ou\_arn](#input\_prod\_ou\_arn) | arn of ou to share to prod accounts | `any` | n/a | yes |
+| <a name="input_prod_account"></a> [prod\_account](#input\_prod\_account) | Used for testing, prod account id | `list(string)` | n/a | yes |
+| <a name="input_prod_ou_arn"></a> [prod\_ou\_arn](#input\_prod\_ou\_arn) | arn of ou to share to prod accounts | `list(string)` | n/a | yes |
+| <a name="input_sandbox_ou_arn"></a> [sandbox\_ou\_arn](#input\_sandbox\_ou\_arn) | arn of ou to share to sandbox accounts | `list(string)` | n/a | yes |
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_ipam_info"></a> [ipam\_info](#output\_ipam\_info) | Basic IPAM info. |
 <!-- END_TF_DOCS -->

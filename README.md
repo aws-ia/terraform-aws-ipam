@@ -1,11 +1,11 @@
 <!-- BEGIN_TF_DOCS -->
 # AWS IP Address Manager Deployment Module
 
-This module can deploy simple or complex AWS IP Address Manager (IPAM) configurations. It is designed to be flexible for many different use cases. The most common use cases (IPAM designs) are highlighted in the [examples/](./examples/) directory. Below is a representation of a symmetrically nested, multi-region deployment that is possible; Its also possible to do [asymmetically nested deployments](images/asymmetrical\_pool\_structure.png) as well which we have as an [example](./examples/basic).
+This module can deploy simple or complex AWS IP Address Manager (IPAM) configurations. It is designed to be flexible for many different use cases. The most common use cases (IPAM designs) are highlighted in the [examples/](./examples/) directory. Below is a representation of a symmetrically nested, multi-region deployment that is possible; Its also possible to do [asymmetically nested deployments](images/asymmetrical\_example.png) as well which we have as an [example](./examples/ipv4\_basic).
 
 ## Possible Symmetically Nested Pool Structure
 
-![symmetrically nested pool deployment](images/symmetrical\_region\_pool\_bizunit\_pool\_structure.png "Region Separated Pools")
+![symmetrically nested pool deployment](images/symmetrical\_example.png "Region Separated Pools")
 
 ## Configuration via the `var.pool_configurations` variable
 
@@ -23,7 +23,6 @@ pool_configurations = {
     description      = "my pool"
     cidr             = ["10.0.0.0/16"]
     locale           = "us-east-1"
-    cidr_allocations = ["10.0.64.0/20"]
 
     sub_pools = {
 
@@ -100,7 +99,7 @@ IPAM operating\_region must be set for the primary region in your terraform prov
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.3.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.4.0 |
 
 ## Modules
 
@@ -129,6 +128,7 @@ IPAM operating\_region must be set for the primary region in your terraform prov
 | <a name="input_ipam_scope_type"></a> [ipam\_scope\_type](#input\_ipam\_scope\_type) | Which scope type to use. Valid inputs: `public`, `private`. You can alternatively provide your own scope id. | `string` | `"private"` | no |
 | <a name="input_pool_configurations"></a> [pool\_configurations](#input\_pool\_configurations) | A multi-level-nested map describing nested IPAM pools. Can nest up to 3 levels with the top level being outside the `pool_configurations`. This attribute is quite complex, see README.md for further explanation. | `any` | `{}` | no |
 | <a name="input_top_auto_import"></a> [top\_auto\_import](#input\_top\_auto\_import) | `auto_import` setting for top level pool. | `bool` | `null` | no |
+| <a name="input_top_cidr_authorization_context"></a> [top\_cidr\_authorization\_context](#input\_top\_cidr\_authorization\_context) | A signed document that proves that you are authorized to bring the specified IP address range to Amazon using BYOIP. This is not stored in the state file. For more information see: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_ipam_pool_cidr#cidr_authorization_context. | `any` | `null` | no |
 | <a name="input_top_description"></a> [top\_description](#input\_top\_description) | Description of top level pool. | `string` | `""` | no |
 | <a name="input_top_ram_share_principals"></a> [top\_ram\_share\_principals](#input\_top\_ram\_share\_principals) | Principals to create RAM shares for top level pool. | `list(string)` | `null` | no |
 
@@ -136,6 +136,7 @@ IPAM operating\_region must be set for the primary region in your terraform prov
 
 | Name | Description |
 |------|-------------|
+| <a name="output_ipam_info"></a> [ipam\_info](#output\_ipam\_info) | If created, ouput the IPAM object information. |
 | <a name="output_operating_regions"></a> [operating\_regions](#output\_operating\_regions) | List of all IPAM operating regions. |
 | <a name="output_pool_level_0"></a> [pool\_level\_0](#output\_pool\_level\_0) | Map of all pools at level 0. |
 | <a name="output_pool_names"></a> [pool\_names](#output\_pool\_names) | List of all pool names. |
