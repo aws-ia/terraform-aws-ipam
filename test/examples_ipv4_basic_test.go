@@ -8,13 +8,14 @@ import (
 	"github.com/gruntwork-io/terratest/modules/terraform"
 )
 
+// You must set these environment variables for this test
 const (
 	sandbox = "SANDBOX_OU_ARN"
 	test    = "TEST_ACCOUNT"
 	prod    = "PROD_OU_ARN"
 )
 
-func TestExamplesBasic(t *testing.T) {
+func TestExamplesIPv4Basic(t *testing.T) {
 	if os.Getenv(test) == "" || os.Getenv(sandbox) == "" || os.Getenv(prod) == "" {
 		fmt.Println("Must set environment variables.")
 		os.Exit(1)

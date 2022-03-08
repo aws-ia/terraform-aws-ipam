@@ -25,10 +25,11 @@ variable "pool_configurations" {
   default = {}
 
   # Validate no more than 3 layers of sub_pools specified
-  validation {
-    error_message = "Sub pools (sub_pools) is defined in the 3rd level of a nested pool. Sub pools can only be defined up to 3 levels."
-    condition     = flatten([for k, v in var.pool_configurations : [for k2, v2 in v.sub_pools : [for k3, v3 in try(v2.sub_pools, []) : "${k}/${k2}/${k3}" if try(v3.sub_pools, []) != []]]]) == []
-  }
+  # TODO: fix validation, fails if less than 2 layers of pools
+  # validation {
+  #   error_message = "Sub pools (sub_pools) is defined in the 3rd level of a nested pool. Sub pools can only be defined up to 3 levels."
+  #   condition     = flatten([for k, v in var.pool_configurations : [for k2, v2 in v.sub_pools : [for k3, v3 in try(v2.sub_pools, []) : "${k}/${k2}/${k3}" if try(v3.sub_pools, []) != []]]]) == []
+  # }
 }
 
 variable "top_cidr" {
