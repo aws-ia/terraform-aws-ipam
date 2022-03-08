@@ -1,13 +1,34 @@
 variable "pool_configurations" {
   description = "A multi-level-nested map describing nested IPAM pools. Can nest up to 3 levels with the top level being outside the `pool_configurations`. This attribute is quite complex, see README.md for further explanation."
   type        = any
-  default     = {}
 
-  # its possible to write a pretty advanced validation here and its probably worth the time
-  # validation {
-  #   error_message = "value"
-  #   condition = false
-  # }
+  # Below is an example of the actual expected structure for `pool_configurations`. type = any is currently being used, may adjust in the future
+
+  # type        = object({
+  #   cidr                 = optional(list(string))
+  #   ram_share_principals = optional(list(string))
+  #   locale                            = optional(string)
+  #   allocation_default_netmask_length = optional(string)
+  #   allocation_max_netmask_length     = optional(string)
+  #   allocation_min_netmask_length     = optional(string)
+  #   auto_import                       = optional(string)
+  #   aws_service                       = optional(string)
+  #   description                       = optional(string)
+  #   name                              = optional(string)
+  #   publicly_advertisable             = optional(bool)
+  #   allocation_resource_tags   = optional(map(string))
+  #   tags                       = optional(map(string))
+  #   cidr_authorization_context = optional(map(string))
+
+  #   sub_pools = (repeat of pool_configuration object above )
+  # })
+  default = {}
+
+  # Validate no more than 3 layers of sub_pools specified
+  validation {
+    error_message = "Sub pools (sub_pools) is defined in the 3rd level of a nested pool. Sub pools can only be defined up to 3 levels."
+    condition     = flatten([for k, v in var.pool_configurations : [for k2, v2 in v.sub_pools : [for k3, v3 in try(v2.sub_pools, []) : "${k}/${k2}/${k3}" if try(v3.sub_pools, []) != []]]]) == []
+  }
 }
 
 variable "top_cidr" {

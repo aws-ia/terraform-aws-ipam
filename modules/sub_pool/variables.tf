@@ -1,6 +1,5 @@
 variable "pool_config" {
   description = "Configuration of the Pool you want to deploy. All aws_vpc_ipam_pool arguments are available as well as ram_share_principals list and sub_pools map (up to 3 levels)."
-
   type = object({
     cidr                 = list(string)
     ram_share_principals = optional(list(string))
@@ -21,6 +20,19 @@ variable "pool_config" {
 
     sub_pools = optional(any)
   })
+
+  # Validation to ensure keys
+  # if specify type = object() keys are silently dropped, no validation required but also no error if improper keys
+  # if speicy type = any we can validate which provides an error opportunity BUT values are not defaulted, makes code complex
+  # validation {
+  #   condition = (length(setsubtract(keys(var.pool_config), [
+  #                 "name", "cidr", "locale", "ram_share_principals", "auto_import", "aws_service", "description",
+  #                 "publicly_advertisable", "allocation_resource_tags", "tags", "cidr_authorization_context",
+  #                 "sub_pools", "allocation_default_netmask_length", "allocation_max_netmask_length",
+  #                 "allocation_min_netmask_length"]
+  #                )) == 0)
+  #   error_message = "Can only accept certain parameters. See modules/sub_pool/variables.tf for `pool_config` options."
+  # }
 }
 
 variable "implied_locale" {
