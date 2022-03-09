@@ -1,18 +1,16 @@
-module "basic_ipam" {
-  source = "../ipv4_basic"
+#####################################################################################
+# Terraform module examples are meant to show an _example_ on how to use a module
+# per use-case. The code below should not be copied directly but referenced in order
+# to build your own root module that invokes this module
+#####################################################################################
 
-  prod_account   = var.prod_account
-  prod_ou_arn    = var.prod_ou_arn
-  sandbox_ou_arn = var.sandbox_ou_arn
-}
-
-module "ipv6_scope" {
+module "ipv6_basic" {
+  # source  = "aws-ia/ipam/aws"
   source = "../.."
 
-  top_cidr       = [var.ipv6_cidr]
-  address_family = "ipv6"
-  create_ipam    = false
-  ipam_scope_id  = module.basic_ipam.ipam_info.public_default_scope_id
+  top_cidr        = [var.ipv6_cidr]
+  address_family  = "ipv6"
+  ipam_scope_type = "public"
 
   top_cidr_authorization_context = {
     message   = var.cidr_authorization_context_message

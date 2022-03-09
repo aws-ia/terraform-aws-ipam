@@ -15,7 +15,7 @@ const (
 	signature = "SIGNATURE"
 )
 
-func TestExamplesIPv6PlusBasic(t *testing.T) {
+func TestExamplesIPv6(t *testing.T) {
 	// Runs tests if environment variables found
 	if os.Getenv(ipv6_cidr) != "" && os.Getenv(message) != "" && os.Getenv(signature) != "" {
 		fmt.Println("Environment variables found, running IPv6 tests.")
@@ -25,11 +25,8 @@ func TestExamplesIPv6PlusBasic(t *testing.T) {
 		_signature := os.Getenv(signature)
 
 		terraformOptions := &terraform.Options{
-			TerraformDir: "../examples/ipv6_plus_basic",
+			TerraformDir: "../examples/single_scope_ipv6",
 			Vars: map[string]interface{}{
-				// "prod_account":                         []string{"826255695022"},
-				// "sandbox_ou_arn":                       []string{"826255695022"},
-				// "prod_ou_arn":                          []string{"826255695022"},
 				"ipv6_cidr":                            _ipv6_cidr,
 				"cidr_authorization_context_message":   _message,
 				"cidr_authorization_context_signature": _signature,
