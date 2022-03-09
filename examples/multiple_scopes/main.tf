@@ -45,30 +45,30 @@ module "ipv4_scope" {
   }
 }
 
-# resource "aws_vpc_ipam_scope" "scope_for_overlapping_cidr" {
-#   ipam_id     = module.ipv4_scope.ipam_info.id
-#   description = "Second private scope for overlapping cidr."
-# }
+resource "aws_vpc_ipam_scope" "scope_for_overlapping_cidr" {
+  ipam_id     = module.ipv4_scope.ipam_info.id
+  description = "Second private scope for overlapping cidr."
+}
 
-# module "overlapping_cidr_second_ipv4_scope" {
-#   # source  = "aws-ia/ipam/aws"
-#   source = "../.."
+module "overlapping_cidr_second_ipv4_scope" {
+  # source  = "aws-ia/ipam/aws"
+  source = "../.."
 
-#   top_cidr       = [var.cidr]
-#   create_ipam    = false
-#   ipam_scope_id  = aws_vpc_ipam_scope.scope_for_overlapping_cidr.id
+  top_cidr      = [var.cidr]
+  create_ipam   = false
+  ipam_scope_id = aws_vpc_ipam_scope.scope_for_overlapping_cidr.id
 
-#   pool_configurations = {
-#     us-east-1 = {
-#       name        = "ipv6 us-east-1"
-#       description = "pool for ipv6 us-east-1"
-#       cidr        = "10.0.0.0/16" #[local.regional_cidrs[0]]
-#       locale      = "us-east-1"
-#     }
-#     us-west-2 = {
-#       description = "pool for ipv6 us-west-2"
-#       cidr        = "10.0.1.0/16" #[local.regional_cidrs[1]]
-#       locale      = "us-west-2"
-#     }
-#   }
-# }
+  pool_configurations = {
+    us-east-1 = {
+      name        = "ipv6 us-east-1"
+      description = "pool for ipv6 us-east-1"
+      cidr        = "10.0.0.0/16" #[local.regional_cidrs[0]]
+      locale      = "us-east-1"
+    }
+    us-west-2 = {
+      description = "pool for ipv6 us-west-2"
+      cidr        = "10.0.1.0/16" #[local.regional_cidrs[1]]
+      locale      = "us-west-2"
+    }
+  }
+}
