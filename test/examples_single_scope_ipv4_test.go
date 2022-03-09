@@ -10,16 +10,16 @@ import (
 
 // You must set these environment variables for this test
 const (
-	test = "TEST_ACCOUNT"
+	test_account = "TEST_ACCOUNT"
 )
 
 func TestExamplesIPv4Basic(t *testing.T) {
-	if os.Getenv(test) == "" {
+	if os.Getenv(test_account) == "" {
 		fmt.Println("Must set environment variables.")
 		os.Exit(1)
 	}
 
-	test_account_id := os.Getenv(test)
+	test_account_id := os.Getenv(test_account)
 
 	terraformOptions := &terraform.Options{
 		TerraformDir: "../examples/single_scope_ipv4",
