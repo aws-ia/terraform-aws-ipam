@@ -51,11 +51,12 @@ module "level_zero" {
   source_ipam_pool_id = null
 
   pool_config = {
-    cidr                 = var.top_cidr
-    ram_share_principals = var.top_ram_share_principals
-    auto_import          = var.top_auto_import
-    description          = var.top_description
-    tags                 = {}
+    cidr                       = var.top_cidr
+    ram_share_principals       = var.top_ram_share_principals
+    auto_import                = var.top_auto_import
+    description                = var.top_description
+    cidr_authorization_context = var.top_cidr_authorization_context
+    tags                       = {}
   }
 }
 
@@ -69,6 +70,7 @@ module "level_one" {
 
   pool_config         = var.pool_configurations[each.key]
   implied_description = each.key
+  implied_name        = each.key
 
   depends_on = [
     module.level_zero
@@ -86,6 +88,7 @@ module "level_two" {
   pool_config         = var.pool_configurations[split("/", each.key)[0]].sub_pools[split("/", each.key)[1]]
   implied_locale      = module.level_one[split("/", each.key)[0]].pool.locale
   implied_description = each.key
+  implied_name        = each.key
 
   depends_on = [
     module.level_one
@@ -109,6 +112,7 @@ module "level_three" {
     join("/", [split("/", each.key)[0], split("/", each.key)[1]])
   ].pool.locale
   implied_description = each.key
+  implied_name        = each.key
 
   depends_on = [
     module.level_two

@@ -27,3 +27,8 @@ output "pools_level_3" {
   description = "Map of all pools at level 3."
   value       = try({ for k, v in module.level_three : k => v.pool }, null)
 }
+
+output "ipam_info" {
+  description = "If created, ouput the IPAM object information."
+  value       = var.create_ipam ? aws_vpc_ipam.main[0] : null
+}
