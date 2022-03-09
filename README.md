@@ -5,7 +5,7 @@ This module can deploy simple or complex AWS IP Address Manager (IPAM) configura
 
 ## Possible Symmetically Nested Pool Structure
 
-![symmetrically nested pool deployment](images/symmetrical\_example.png "Region Separated Pools")
+![symmetrically nested pool deployment](images/ipam\_symmetrical.png "Region Separated Pools")
 
 ## Configuration via the `var.pool_configurations` variable
 
@@ -99,7 +99,7 @@ IPAM operating\_region must be set for the primary region in your terraform prov
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.4.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 3.73.0 |
 
 ## Modules
 
