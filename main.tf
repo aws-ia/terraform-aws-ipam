@@ -1,10 +1,4 @@
 locals {
-  # Example Pool Structure
-  # Top  0 - super cidr
-  # level 1 - region
-  # level 2 - env
-  # level 3 - business unit
-
   # if create_ipam is true use determine if public or private default scope should be used. if create_ipam is false use `var.ipam_scope_id`
   scope_id = var.create_ipam ? (
     var.ipam_scope_type == "private" ? aws_vpc_ipam.main[0].private_default_scope_id : aws_vpc_ipam.main[0].public_default_scope_id

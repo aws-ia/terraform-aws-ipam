@@ -19,6 +19,7 @@ module "basic" {
       sub_pools = {
 
         sandbox = {
+          name                 = "mysandbox"
           cidr                 = ["10.0.0.0/20"]
           ram_share_principals = var.sandbox_ou_arn
           allocation_resource_tags = {
