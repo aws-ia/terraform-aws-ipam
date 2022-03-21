@@ -5,6 +5,6 @@ minimum_pre_commit_version: "2.6.0"
 
 repos:
   - repo: https://github.com/aws-ia/pre-commit-configs
-    rev: 4385a8e38e25301855d7db66dfa7855849d63a08  # frozen: v1.3.1
+    rev: ce5b80d2643c3510bd17bb309cb767b6b21dc5ea  # frozen: 1.4
     hooks:
       - id: aws-ia-meta-hook

@@ -1,5 +1,6 @@
 locals {
   description = var.pool_config.description == null ? var.implied_description : var.pool_config.description
+  name        = var.pool_config.name == null ? var.implied_name : var.pool_config.name
 }
 
 resource "aws_vpc_ipam_pool" "sub" {
@@ -18,7 +19,7 @@ resource "aws_vpc_ipam_pool" "sub" {
   publicly_advertisable             = var.pool_config.publicly_advertisable
 
   tags = merge(var.pool_config.tags,
-  { Name = var.implied_name })
+  { Name = local.name })
 }
 
 resource "aws_vpc_ipam_pool_cidr" "sub" {

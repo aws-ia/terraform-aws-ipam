@@ -1,21 +1,22 @@
 <!-- BEGIN_TF_DOCS -->
-# AWS IP Address Manager Deployment Module
+# Terraform Module for Amazon VPC IP Address Manager on AWS
 
-This module can deploy simple or complex AWS IP Address Manager (IPAM) configurations. It is designed to be flexible for many different use cases. The most common use cases (IPAM designs) are highlighted in the [examples/](./examples/) directory. Below is a representation of a symmetrically nested, multi-region deployment that is possible; Its also possible to do [asymmetically nested deployments](images/asymmetrical\_example.png) as well which we have as an [example](./examples/ipv4\_basic).
+Built to accommodate a wide range of use cases, this Terraform module can deploy both simple and complex Amazon Virtual Private Cloud (Amazon VPC) IP Address Manager (IPAM) configurations. It supports both symmetrically nested, multi-Region deployments (most common IPAM designs) as well as [asymmetically nested deployments](images/asymmetrical\_example.png).
 
-## Possible Symmetically Nested Pool Structure
+Refer to the [examples/](./examples/) directory in this GitHub repository for examples.
 
-![symmetrically nested pool deployment](images/ipam\_symmetrical.png "Region Separated Pools")
+The embedded example below describes a symmetrically nested pool structure, including its configuration, implementation details, requirements, and more.
 
-## Configuration via the `var.pool_configurations` variable
+## Architecture
 
-This module leans heavily on the variable `var.pool_configurations` which is a multi-level nested map that describes exactly how you want your ipam pools to be nested. It can accept most `aws_vpc_ipam_pool` & `aws_vpc_ipam_pool_cidr` attributes (detailed below) as well as RAM share pools (at any level) to valid AWS principals. **Nested pools do not inherit attributes from their Source pool(s)** so all configuration options are available at each "level".
+![symmetrically nested pool deployment](images/ipam\_symmetrical.png) "Region Separated Pools")
 
-In this module pools can be nested up to 4 levels deep, 1 root pool + up to 3 nested pools. The root pool defines that `address_family`; If you want to deploy an IPv4 & IPv6 pool structure, you must instantiate the module for each type.
+## Configuration
+This module strongly relies on the `var.pool_configuration` variable, which is a multi-level, nested map that describes how to nest your IPAM pools. It can accept most `aws_vpc_ipam_pool` and `aws_vpc_ipam_pool_cidr` attributes (detailed below) as well as RAM share pools (at any level) to valid AWS principals. Nested pools do not inherit attributes from their source pool(s), so all configuration options are available at each level. `locale` is implied in sub pools after declared in a parent.
 
-The `pool_configurations` variable is the structure of the other 3 levels. The sub-module sub\_pool has a variable [var.pool\_config](./modules/sub\_pool/variables.tf#L1) that defines the structure that each pool can accept.
+In this module, pools can be nested up to four levels, including one root pool and up to three nested pools. The root pool defines the `address_family` variable. If you want to deploy an IPv4 and IPv6 pool structure, you must instantiate the module for each type.
 
-The structure of the variable is:
+The `pool_configurations` variable is the structure of the other three levels. The `sub_pool` submodule has a `var.pool_config` variable that defines the structure that each pool can accept. The variable has the following structure:
 
 ```
 pool_configurations = {
@@ -36,7 +37,7 @@ pool_configurations = {
 }
 ```
 
-The key of a `pool_config` is the name of the pool, following by its attributes, `ram_share_principals`, and a `sub_pools` map, which is another nested `pool_config`.
+The key of a `pool_config` variable is the name of the pool, followed by its attributes `ram_share_principals` and a `sub_pools` map, which is another nested `pool_config` variable.
 
 ```terraform
 variable "pool_config" {
@@ -44,6 +45,7 @@ variable "pool_config" {
     cidr                 = list(string)
     ram_share_principals = optional(list(string))
 
+    name                              = optional(string)
     locale                            = optional(string)
     allocation_default_netmask_length = optional(string)
     allocation_max_netmask_length     = optional(string)
@@ -62,31 +64,19 @@ variable "pool_config" {
 }
 ```
 
-## Implementation Details
+## Implementation
+
+### Implied Pool Names & Descriptions
+
+By default, pool `Name` tags and pool descriptions are implied from the name-hierarchy structure of the pool. For example, a pool with two parents `us-east-1` and `dev` has an implied name and description value of `us-east-1/dev`. You can override either or both name & description at any pool level by specifying a `name` or `description`.
 
 ### Locales
 
-IPAM pools **do not inherit attributes** from their parent pools. Locales cannot change from parent to child. For that reason, once a pool in `var.pool_configurations` defines a `locale` all other child pools have an `implied_locale`.
-
-### Implied Descriptions
-
-Descriptions of pools are implied from the name-hierarchy of the pool. For example a with 2 parents "us-east-1" -> "dev" will have an `implied_description` of `"us-east-1/dev"`. You can override the description at any pool level by specifying a description.
-
-`implied_desription = var.pool_config.description == null ? var.implied_description : var.pool_config.description`
+IPAM pools do not inherit attributes from their parent pools. Locales cannot change from parent to child. For that reason, after a pool in the `var.pool_configurations` variable defines a `locale` value, all other child pools have an `implied_locale` value.
 
 ### Operating Regions
 
-IPAM operating\_region must be set for the primary region in your terraform provider block and any regions you wish to set a `locale` at. For that reason we construct the `aws_vpc_ipam.operating_regions` from your `pool_configurations` + `data.aws_region.current.name`.
-
-## Importing at Multiple Levels (examples)
-
-**level 0 pool**: `terraform import module.basic.module.level_zero.aws_vpc_ipam_pool.sub ipam-pool-<>`
-
-**level 1 pool**: `terraform import module.basic.module.level_one["<>"].aws_vpc_ipam_pool.sub ipam-pool-<>`
-
-**level 2 pool**: `terraform import module.basic.module.level_two["<>/<>"].aws_vpc_ipam_pool.sub ipam-pool-<>`
-
-**level 3 pool**: `terraform import module.basic.module.level_three["<>/<>/<>"].aws_vpc_ipam_pool.sub ipam-pool-<>`
+The IPAM `operating_region` variable must be set for the primary Region in your Terraform provider block and any Regions you want to set a `locale`. For that reason, the value of the `aws_vpc_ipam.operating_regions` variable is constructed by combining the  `pool_configurations` and `data.aws_region.current.name` attributes.
 
 ## Requirements
 
@@ -99,7 +89,7 @@ IPAM operating\_region must be set for the primary region in your terraform prov
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 3.73.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.6.0 |
 
 ## Modules
 
