@@ -9,7 +9,7 @@ The embedded example below describes a symmetrically nested pool structure, incl
 
 ## Architecture
 
-![symmetrically nested pool deployment](images/ipam\_symmetrical.png) "Region Separated Pools")
+![symmetrically nested pool deployment](images/ipam\_symmetrical.png)
 
 ## Configuration
 This module strongly relies on the `var.pool_configuration` variable, which is a multi-level, nested map that describes how to nest your IPAM pools. It can accept most `aws_vpc_ipam_pool` and `aws_vpc_ipam_pool_cidr` attributes (detailed below) as well as RAM share pools (at any level) to valid AWS principals. Nested pools do not inherit attributes from their source pool(s), so all configuration options are available at each level. `locale` is implied in sub pools after declared in a parent.
@@ -66,9 +66,9 @@ variable "pool_config" {
 
 ## Implementation
 
-### Implied Pool Names & Descriptions
+### Implied pool names and descriptions
 
-By default, pool `Name` tags and pool descriptions are implied from the name-hierarchy structure of the pool. For example, a pool with two parents `us-east-1` and `dev` has an implied name and description value of `us-east-1/dev`. You can override either or both name & description at any pool level by specifying a `name` or `description`.
+By default, pool `Name` tags and pool descriptions are implied from the name-hierarchy structure of the pool. For example, a pool with two parents `us-east-1` and `dev` has an implied name and description value of `us-east-1/dev`. You can override either or both name and description at any pool level by specifying a `name` or `description` value.
 
 ### Locales
 
@@ -111,16 +111,16 @@ The IPAM `operating_region` variable must be set for the primary Region in your 
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_top_cidr"></a> [top\_cidr](#input\_top\_cidr) | Top level cidr blocks. | `list(string)` | n/a | yes |
+| <a name="input_top_cidr"></a> [top\_cidr](#input\_top\_cidr) | Top-level CIDR blocks. | `list(string)` | n/a | yes |
 | <a name="input_address_family"></a> [address\_family](#input\_address\_family) | IPv4/6 address family. | `string` | `"ipv4"` | no |
-| <a name="input_create_ipam"></a> [create\_ipam](#input\_create\_ipam) | Determines whether or not to create an IPAM. If `false` you must also provide a var.ipam\_scope\_id | `bool` | `true` | no |
-| <a name="input_ipam_scope_id"></a> [ipam\_scope\_id](#input\_ipam\_scope\_id) | (Optional) Required if `var.ipam_id` is set. Which scope to deploy pools into. | `string` | `null` | no |
-| <a name="input_ipam_scope_type"></a> [ipam\_scope\_type](#input\_ipam\_scope\_type) | Which scope type to use. Valid inputs: `public`, `private`. You can alternatively provide your own scope id. | `string` | `"private"` | no |
-| <a name="input_pool_configurations"></a> [pool\_configurations](#input\_pool\_configurations) | A multi-level-nested map describing nested IPAM pools. Can nest up to 3 levels with the top level being outside the `pool_configurations`. This attribute is quite complex, see README.md for further explanation. | `any` | `{}` | no |
-| <a name="input_top_auto_import"></a> [top\_auto\_import](#input\_top\_auto\_import) | `auto_import` setting for top level pool. | `bool` | `null` | no |
-| <a name="input_top_cidr_authorization_context"></a> [top\_cidr\_authorization\_context](#input\_top\_cidr\_authorization\_context) | A signed document that proves that you are authorized to bring the specified IP address range to Amazon using BYOIP. This is not stored in the state file. For more information see: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_ipam_pool_cidr#cidr_authorization_context. | `any` | `null` | no |
-| <a name="input_top_description"></a> [top\_description](#input\_top\_description) | Description of top level pool. | `string` | `""` | no |
-| <a name="input_top_ram_share_principals"></a> [top\_ram\_share\_principals](#input\_top\_ram\_share\_principals) | Principals to create RAM shares for top level pool. | `list(string)` | `null` | no |
+| <a name="input_create_ipam"></a> [create\_ipam](#input\_create\_ipam) | Determines whether to create an IPAM. If `false`, you must also provide a var.ipam\_scope\_id. | `bool` | `true` | no |
+| <a name="input_ipam_scope_id"></a> [ipam\_scope\_id](#input\_ipam\_scope\_id) | (Optional) Required if `var.ipam_id` is set. Determines which scope to deploy pools into. | `string` | `null` | no |
+| <a name="input_ipam_scope_type"></a> [ipam\_scope\_type](#input\_ipam\_scope\_type) | Which scope type to use. Valid inputs include `public` or `private`. You can alternatively provide your own scope ID. | `string` | `"private"` | no |
+| <a name="input_pool_configurations"></a> [pool\_configurations](#input\_pool\_configurations) | A multi-level, nested map describing nested IPAM pools. Can nest up to three levels with the top level being outside the `pool_configurations`. This attribute is quite complex, see README.md for further explanation. | `any` | `{}` | no |
+| <a name="input_top_auto_import"></a> [top\_auto\_import](#input\_top\_auto\_import) | `auto_import` setting for top-level pool. | `bool` | `null` | no |
+| <a name="input_top_cidr_authorization_context"></a> [top\_cidr\_authorization\_context](#input\_top\_cidr\_authorization\_context) | A signed document that proves that you are authorized to bring the specified IP address range to Amazon using BYOIP. Document is not stored in the state file. For more information, refer to https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_ipam_pool_cidr#cidr_authorization_context. | `any` | `null` | no |
+| <a name="input_top_description"></a> [top\_description](#input\_top\_description) | Description of top-level pool. | `string` | `""` | no |
+| <a name="input_top_ram_share_principals"></a> [top\_ram\_share\_principals](#input\_top\_ram\_share\_principals) | Principals to create RAM shares for top-level pool. | `list(string)` | `null` | no |
 
 ## Outputs
 
