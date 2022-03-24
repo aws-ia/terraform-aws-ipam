@@ -1,5 +1,5 @@
 variable "pool_configurations" {
-  description = "A multi-level-nested map describing nested IPAM pools. Can nest up to 3 levels with the top level being outside the `pool_configurations`. This attribute is quite complex, see README.md for further explanation."
+  description = "A multi-level, nested map describing nested IPAM pools. Can nest up to three levels with the top level being outside the `pool_configurations`. This attribute is quite complex, see README.md for further explanation."
   type        = any
 
   # Below is an example of the actual expected structure for `pool_configurations`. type = any is currently being used, may adjust in the future
@@ -33,30 +33,30 @@ variable "pool_configurations" {
 }
 
 variable "top_cidr" {
-  description = "Top level cidr blocks."
+  description = "Top-level CIDR blocks."
   type        = list(string)
 }
 
 variable "top_ram_share_principals" {
-  description = "Principals to create RAM shares for top level pool."
+  description = "Principals to create RAM shares for top-level pool."
   type        = list(string)
   default     = null
 }
 
 variable "top_auto_import" {
-  description = "`auto_import` setting for top level pool."
+  description = "`auto_import` setting for top-level pool."
   type        = bool
   default     = null
 }
 
 variable "top_description" {
-  description = "Description of top level pool."
+  description = "Description of top-level pool."
   type        = string
   default     = ""
 }
 
 variable "top_cidr_authorization_context" {
-  description = "A signed document that proves that you are authorized to bring the specified IP address range to Amazon using BYOIP. This is not stored in the state file. For more information see: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_ipam_pool_cidr#cidr_authorization_context."
+  description = "A signed document that proves that you are authorized to bring the specified IP address range to Amazon using BYOIP. Document is not stored in the state file. For more information, refer to https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_ipam_pool_cidr#cidr_authorization_context."
   type        = any
   default     = null
 }
@@ -72,19 +72,19 @@ variable "address_family" {
 }
 
 variable "create_ipam" {
-  description = "Determines whether or not to create an IPAM. If `false` you must also provide a var.ipam_scope_id"
+  description = "Determines whether to create an IPAM. If `false`, you must also provide a var.ipam_scope_id."
   type        = bool
   default     = true
 }
 
 variable "ipam_scope_id" {
-  description = "(Optional) Required if `var.ipam_id` is set. Which scope to deploy pools into."
+  description = "(Optional) Required if `var.ipam_id` is set. Determines which scope to deploy pools into."
   type        = string
   default     = null
 }
 
 variable "ipam_scope_type" {
-  description = "Which scope type to use. Valid inputs: `public`, `private`. You can alternatively provide your own scope id."
+  description = "Which scope type to use. Valid inputs include `public` or `private`. You can alternatively provide your own scope ID."
   type        = string
   default     = "private"
 
