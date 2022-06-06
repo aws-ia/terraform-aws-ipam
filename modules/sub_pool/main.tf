@@ -1,10 +1,12 @@
 locals {
   description = var.pool_config.description == null ? var.implied_description : var.pool_config.description
-  name        = var.pool_config.name == null ? var.implied_name : var.pool_config.name
-
+  
+  name = var.pool_config.name == null ? var.implied_name : var.pool_config.name
   tags = merge(var.pool_config.tags, {
     Name = local.name }
   )
+  
+  ram_share_enabled = try(length(var.pool_config.ram_share_principals), 0) > 0
 }
 
 resource "aws_vpc_ipam_pool" "sub" {
@@ -13,7 +15,7 @@ resource "aws_vpc_ipam_pool" "sub" {
   source_ipam_pool_id = var.source_ipam_pool_id
 
   description                       = local.description
-  locale                            = var.implied_locale == null ? var.pool_config.locale : var.implied_locale
+  locale                            = var.implied_locale != "None" ? var.implied_locale : var.pool_config.locale
   allocation_default_netmask_length = var.pool_config.allocation_default_netmask_length
   allocation_max_netmask_length     = var.pool_config.allocation_max_netmask_length
   allocation_min_netmask_length     = var.pool_config.allocation_min_netmask_length
@@ -41,7 +43,7 @@ resource "aws_vpc_ipam_pool_cidr" "sub" {
 }
 
 resource "aws_ram_resource_share" "sub" {
-  count = var.pool_config.ram_share_principals == null ? 0 : 1
+  count = local.ram_share_enabled ? 1 : 0
 
   name = replace(var.implied_description, "/", "-")
 
@@ -49,14 +51,14 @@ resource "aws_ram_resource_share" "sub" {
 }
 
 resource "aws_ram_resource_association" "sub" {
-  count = var.pool_config.ram_share_principals == null ? 0 : 1
+  count = local.ram_share_enabled ? 1 : 0
 
   resource_arn       = aws_vpc_ipam_pool.sub.arn
   resource_share_arn = aws_ram_resource_share.sub[0].arn
 }
 
 resource "aws_ram_principal_association" "sub" {
-  for_each = var.pool_config.ram_share_principals == null ? [] : toset(var.pool_config.ram_share_principals)
+  for_each = local.ram_share_enabled ? toset(var.pool_config.ram_share_principals) : []
 
   principal          = each.key
   resource_share_arn = aws_ram_resource_share.sub[0].arn

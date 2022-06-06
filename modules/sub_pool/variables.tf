@@ -38,7 +38,7 @@ variable "pool_config" {
 variable "implied_locale" {
   description = "Locale is implied from a parent pool even if another is specified. Its not possible to set child pools to different locales."
   type        = string
-  default     = null
+  default     = "None"
 }
 
 variable "implied_description" {
