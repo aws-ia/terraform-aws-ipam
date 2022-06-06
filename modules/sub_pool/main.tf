@@ -1,6 +1,10 @@
 locals {
   description = var.pool_config.description == null ? var.implied_description : var.pool_config.description
   name        = var.pool_config.name == null ? var.implied_name : var.pool_config.name
+
+  tags = merge(var.pool_config.tags, {
+    Name = local.name }
+  )
 }
 
 resource "aws_vpc_ipam_pool" "sub" {
@@ -18,8 +22,7 @@ resource "aws_vpc_ipam_pool" "sub" {
   aws_service                       = var.pool_config.aws_service
   publicly_advertisable             = var.pool_config.publicly_advertisable
 
-  tags = merge(var.pool_config.tags,
-  { Name = local.name })
+  tags = local.tags
 }
 
 resource "aws_vpc_ipam_pool_cidr" "sub" {
@@ -41,6 +44,8 @@ resource "aws_ram_resource_share" "sub" {
   count = var.pool_config.ram_share_principals == null ? 0 : 1
 
   name = replace(var.implied_description, "/", "-")
+
+  tags = local.tags
 }
 
 resource "aws_ram_resource_association" "sub" {
