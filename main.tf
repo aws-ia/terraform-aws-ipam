@@ -35,6 +35,8 @@ resource "aws_vpc_ipam" "main" {
       region_name = operating_regions.key
     }
   }
+
+  tags = var.tags
 }
 
 module "level_zero" {
