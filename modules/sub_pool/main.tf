@@ -9,7 +9,7 @@ resource "aws_vpc_ipam_pool" "sub" {
   source_ipam_pool_id = var.source_ipam_pool_id
 
   description                       = local.description
-  locale                            = var.implied_locale == null ? var.pool_config.locale : var.implied_locale
+  locale                            = var.implied_locale != "None" ? var.implied_locale : var.pool_config.locale
   allocation_default_netmask_length = var.pool_config.allocation_default_netmask_length
   allocation_max_netmask_length     = var.pool_config.allocation_max_netmask_length
   allocation_min_netmask_length     = var.pool_config.allocation_min_netmask_length
