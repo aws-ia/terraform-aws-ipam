@@ -93,3 +93,9 @@ variable "ipam_scope_type" {
     error_message = "Scope type must be either public or private."
   }
 }
+
+variable "tags" {
+  description = "Tags to add to the aws_vpc_ipam resource."
+  type        = any
+  default     = {}
+}
