@@ -41,20 +41,20 @@ resource "aws_vpc_ipam_pool_cidr" "sub" {
 }
 
 resource "aws_ram_resource_share" "sub" {
-  count = try(length(var.pool_config.ram_share_principals), 0) > 0 ? 1 : 0
+  count = local.ram_share_enabled ? 1 : 0
 
   name = replace(var.implied_description, "/", "-")
 }
 
 resource "aws_ram_resource_association" "sub" {
-  count = try(length(var.pool_config.ram_share_principals), 0) > 0 ? 1 : 0
+  count = local.ram_share_enabled ? 1 : 0
 
   resource_arn       = aws_vpc_ipam_pool.sub.arn
   resource_share_arn = aws_ram_resource_share.sub[0].arn
 }
 
 resource "aws_ram_principal_association" "sub" {
-  count = try(length(var.pool_config.ram_share_principals), 0) > 0 ? toset(var.pool_config.ram_share_principals) : []
+  count = local.ram_share_enabled ? toset(var.pool_config.ram_share_principals) : []
 
   principal          = each.key
   resource_share_arn = aws_ram_resource_share.sub[0].arn
