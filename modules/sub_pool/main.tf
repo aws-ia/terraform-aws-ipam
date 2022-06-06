@@ -54,7 +54,7 @@ resource "aws_ram_resource_association" "sub" {
 }
 
 resource "aws_ram_principal_association" "sub" {
-  count = local.ram_share_enabled ? toset(var.pool_config.ram_share_principals) : []
+  for_each = local.ram_share_enabled ? toset(var.pool_config.ram_share_principals) : []
 
   principal          = each.key
   resource_share_arn = aws_ram_resource_share.sub[0].arn
