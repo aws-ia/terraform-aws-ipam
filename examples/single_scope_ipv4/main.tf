@@ -14,7 +14,6 @@ module "basic" {
     corporate-us-west-2 = {
       description = "2nd level, locale us-west-2 pool"
       cidr        = ["10.0.0.0/16", "10.1.0.0/16"]
-      locale      = "us-west-2"
 
       sub_pools = {
 
@@ -33,6 +32,7 @@ module "basic" {
             team_a = {
               cidr                 = ["10.1.0.0/24"]
               ram_share_principals = var.prod_account # prod account
+              locale               = "us-west-2"
             }
 
             team_b = {
@@ -42,7 +42,8 @@ module "basic" {
           }
         }
         prod = {
-          cidr = ["10.1.16.0/20"]
+          cidr   = ["10.1.16.0/20"]
+          locale = "us-west-2"
 
           sub_pools = {
             team_a = {
