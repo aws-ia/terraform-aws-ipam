@@ -53,6 +53,7 @@ module "level_zero" {
     description                = var.top_description
     cidr_authorization_context = var.top_cidr_authorization_context
     tags                       = {}
+    name                       = var.top_name
   }
 }
 
