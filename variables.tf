@@ -55,6 +55,12 @@ variable "top_description" {
   default     = ""
 }
 
+variable "top_name" {
+  description = "Name of top-level pool."
+  type        = string
+  default     = ""
+}
+
 variable "top_cidr_authorization_context" {
   description = "A signed document that proves that you are authorized to bring the specified IP address range to Amazon using BYOIP. Document is not stored in the state file. For more information, refer to https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_ipam_pool_cidr#cidr_authorization_context."
   type        = any
