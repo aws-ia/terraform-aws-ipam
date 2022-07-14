@@ -3,7 +3,7 @@
 
 plugin "aws" {
     enabled = true
-    version = "0.12.0"
+    version = "0.14.0"
     source  = "github.com/terraform-linters/tflint-ruleset-aws"
 }
 
@@ -11,6 +11,15 @@ config {
   module     = true
   force      = false
 }
+
+## Ignored Rules:
+
+rule "aws_vpc_ipam_pool_invalid_aws_service" {
+  # https://github.com/terraform-linters/tflint-ruleset-aws/issues/357
+  enabled = false
+}
+
+## Enabled Rules
 
 rule "terraform_required_providers" {
   enabled = true

@@ -1,15 +1,17 @@
 <!-- BEGIN_TF_DOCS -->
 # Terraform Module for Amazon VPC IP Address Manager on AWS
 
-Built to accommodate a wide range of use cases, this Terraform module can deploy both simple and complex Amazon Virtual Private Cloud (Amazon VPC) IP Address Manager (IPAM) configurations. It supports both symmetrically nested, multi-Region deployments (most common IPAM designs) as well as [asymmetically nested deployments](images/asymmetrical\_example.png).
+Built to accommodate a wide range of use cases, this Terraform module can deploy both simple and complex Amazon Virtual Private Cloud (Amazon VPC) IP Address Manager (IPAM) configurations. It supports both symmetrically nested, multi-Region deployments (most common IPAM designs) as well as [asymmetically nested deployments](https://github.com/aws-ia/terraform-aws-ipam/blob/main/images/asymmetrical_example.png).
 
-Refer to the [examples/](./examples/) directory in this GitHub repository for examples.
+Refer to the [examples/](https://github.com/aws-ia/terraform-aws-ipam/blob/main/examples) directory in this GitHub repository for examples.
 
 The embedded example below describes a symmetrically nested pool structure, including its configuration, implementation details, requirements, and more.
 
 ## Architecture
 
-![symmetrically nested pool deployment](images/ipam\_symmetrical.png)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/aws-ia/terraform-aws-ipam/main/images/ipam_symmetrical.png" alt="symmetrically nested pool deployment" width="100%">
+</p>
 
 ## Configuration
 This module strongly relies on the `var.pool_configuration` variable, which is a multi-level, nested map that describes how to nest your IPAM pools. It can accept most `aws_vpc_ipam_pool` and `aws_vpc_ipam_pool_cidr` attributes (detailed below) as well as RAM share pools (at any level) to valid AWS principals. Nested pools do not inherit attributes from their source pool(s), so all configuration options are available at each level. `locale` is implied in sub pools after declared in a parent.
@@ -64,6 +66,34 @@ variable "pool_config" {
 }
 ```
 
+## RAM Sharing
+
+This module allows you to share invidual pools to any valid RAM principal. All levels of `var.pool_configurations` accept an argument `ram_share_principals` which should be a list of valid RAM share principals (org-id, ou-id, or account id).
+
+## Using Outputs
+
+Since resources are dynamically generated based on user configuration, we roll them into grouped outputs. For example, to get attributes off your level 2 pools:
+
+The output `pools_level_2` offers you a map of every pool where the name is the route of the tree keys [example `"corporate-us-west-2/dev"`](https://github.com/aws-ia/terraform-aws-ipam/blob/a7d508cb0be2f68d99952682c2392b6d7d541d96/examples/single_scope_ipv4/main.tf#L28).
+
+To get a specific ID:
+```
+> module.basic.pools_level_2["corporate-us-west-2/dev"].id
+"ipam-pool-0c816929a16f08747"
+```
+
+To get all IDs
+```terraform
+> [ for pool in module.basic.pools_level_2: pool["id"]]
+[
+  "ipam-pool-0c816929a16f08747",
+  "ipam-pool-0192c70b370384661",
+  "ipam-pool-037bb0524f8b3278e",
+  "ipam-pool-09400d26a6d1df4a5",
+  "ipam-pool-0ee5ebe8f8d2d7187",
+]
+```
+
 ## Implementation
 
 ### Implied pool names and descriptions
@@ -89,7 +119,7 @@ The IPAM `operating_region` variable must be set for the primary Region in your 
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 3.73.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.17.1 |
 
 ## Modules
 
@@ -116,12 +146,12 @@ The IPAM `operating_region` variable must be set for the primary Region in your 
 | <a name="input_create_ipam"></a> [create\_ipam](#input\_create\_ipam) | Determines whether to create an IPAM. If `false`, you must also provide a var.ipam\_scope\_id. | `bool` | `true` | no |
 | <a name="input_ipam_scope_id"></a> [ipam\_scope\_id](#input\_ipam\_scope\_id) | (Optional) Required if `var.ipam_id` is set. Determines which scope to deploy pools into. | `string` | `null` | no |
 | <a name="input_ipam_scope_type"></a> [ipam\_scope\_type](#input\_ipam\_scope\_type) | Which scope type to use. Valid inputs include `public` or `private`. You can alternatively provide your own scope ID. | `string` | `"private"` | no |
-| <a name="input_pool_configurations"></a> [pool\_configurations](#input\_pool\_configurations) | A multi-level, nested map describing nested IPAM pools. Can nest up to three levels with the top level being outside the `pool_configurations`. This attribute is quite complex, see README.md for further explanation. | `any` | `{}` | no |
+| <a name="input_pool_configurations"></a> [pool\_configurations](#input\_pool\_configurations) | A multi-level, nested map describing nested IPAM pools. Can nest up to three levels with the top level being outside the `pool_configurations` in vars prefixed `top_`. If arugument descriptions are omitted, you can find them in the [official documentation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_ipam_pool#argument-reference).<br><br>- `ram_share_principals` = (optional, list(string)) of valid organization principals to create ram shares to.<br>- `name`                 = (optional, string) name to give the pool, the key of your map in var.pool\_configurations will be used if omitted.<br>- `description`          = (optional, string) description to give the pool, the key of your map in var.pool\_configurations will be used if omitted.<br>- `cidr`                 = (optional, list(string)) list of CIDRs to provision into pool.<br><br>- `locale`      = (optional, string) locale to set for pool.<br>- `auto_import` = (optional, string)<br>- `tags`        = (optional, map(string))<br>- `allocation_default_netmask_length` = (optional, string)<br>- `allocation_max_netmask_length`     = (optional, string)<br>- `allocation_min_netmask_length`     = (optional, string)<br>- `allocation_resource_tags`          = (optional, map(string))<br><br>The following arguments are available but only relevant for public ips<br>- `cidr_authorization_context` = (optional, map(string)) Details found in [official documentation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_ipam_pool_cidr#cidr_authorization_context).<br>- `aws_service`                = (optional, string)<br>- `publicly_advertisable`      = (optional, bool)<br><br>- `sub_pools` = (nested repeats of pool\_configuration object above) | `any` | `{}` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags to add to the aws\_vpc\_ipam resource. | `any` | `{}` | no |
 | <a name="input_top_auto_import"></a> [top\_auto\_import](#input\_top\_auto\_import) | `auto_import` setting for top-level pool. | `bool` | `null` | no |
 | <a name="input_top_cidr_authorization_context"></a> [top\_cidr\_authorization\_context](#input\_top\_cidr\_authorization\_context) | A signed document that proves that you are authorized to bring the specified IP address range to Amazon using BYOIP. Document is not stored in the state file. For more information, refer to https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_ipam_pool_cidr#cidr_authorization_context. | `any` | `null` | no |
 | <a name="input_top_description"></a> [top\_description](#input\_top\_description) | Description of top-level pool. | `string` | `""` | no |
-| <a name="input_top_name"></a> [top\_name](#input\_top\_name) | Name of top-level pool. | `string` | `""` | no |
+| <a name="input_top_name"></a> [top\_name](#input\_top\_name) | Name of top-level pool. | `string` | `null` | no |
 | <a name="input_top_ram_share_principals"></a> [top\_ram\_share\_principals](#input\_top\_ram\_share\_principals) | Principals to create RAM shares for top-level pool. | `list(string)` | `null` | no |
 
 ## Outputs
