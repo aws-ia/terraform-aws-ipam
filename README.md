@@ -89,7 +89,7 @@ The IPAM `operating_region` variable must be set for the primary Region in your 
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 3.73.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.17.1 |
 
 ## Modules
 
@@ -121,7 +121,7 @@ The IPAM `operating_region` variable must be set for the primary Region in your 
 | <a name="input_top_auto_import"></a> [top\_auto\_import](#input\_top\_auto\_import) | `auto_import` setting for top-level pool. | `bool` | `null` | no |
 | <a name="input_top_cidr_authorization_context"></a> [top\_cidr\_authorization\_context](#input\_top\_cidr\_authorization\_context) | A signed document that proves that you are authorized to bring the specified IP address range to Amazon using BYOIP. Document is not stored in the state file. For more information, refer to https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_ipam_pool_cidr#cidr_authorization_context. | `any` | `null` | no |
 | <a name="input_top_description"></a> [top\_description](#input\_top\_description) | Description of top-level pool. | `string` | `""` | no |
-| <a name="input_top_name"></a> [top\_name](#input\_top\_name) | Name of top-level pool. | `string` | `""` | no |
+| <a name="input_top_name"></a> [top\_name](#input\_top\_name) | Name of top-level pool. | `string` | `null` | no |
 | <a name="input_top_ram_share_principals"></a> [top\_ram\_share\_principals](#input\_top\_ram\_share\_principals) | Principals to create RAM shares for top-level pool. | `list(string)` | `null` | no |
 
 ## Outputs

@@ -52,7 +52,6 @@ module "level_zero" {
     auto_import                = var.top_auto_import
     description                = var.top_description
     cidr_authorization_context = var.top_cidr_authorization_context
-    tags                       = {}
     name                       = var.top_name
   }
 }

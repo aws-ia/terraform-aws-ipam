@@ -58,7 +58,7 @@ variable "top_description" {
 variable "top_name" {
   description = "Name of top-level pool."
   type        = string
-  default     = ""
+  default     = null
 }
 
 variable "top_cidr_authorization_context" {

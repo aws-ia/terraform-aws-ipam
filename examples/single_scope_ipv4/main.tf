@@ -9,6 +9,7 @@ module "basic" {
   source = "../.."
 
   top_cidr = ["10.0.0.0/8"]
+  top_name = "basic ipam"
 
   pool_configurations = {
     corporate-us-west-2 = {
