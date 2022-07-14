@@ -5,22 +5,22 @@ variable "pool_configurations" {
   A multi-level, nested map describing nested IPAM pools. Can nest up to three levels with the top level being outside the `pool_configurations` in vars prefixed `top_`. If arugument descriptions are omitted, you can find them in the [official documentation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_ipam_pool#argument-reference).
 
   - `ram_share_principals` = (optional, list(string)) of valid organization principals to create ram shares to.
-  - `name` = (optional, string) name to give the pool, the key of your map in var.pool_configurations will be used if omitted.
-  - `description` = (optional, string) description to give the pool, the key of your map in var.pool_configurations will be used if omitted.
-  - `cidr` = (optional, list(string)) list of CIDRs to provision into pool.
+  - `name`                 = (optional, string) name to give the pool, the key of your map in var.pool_configurations will be used if omitted.
+  - `description`          = (optional, string) description to give the pool, the key of your map in var.pool_configurations will be used if omitted.
+  - `cidr`                 = (optional, list(string)) list of CIDRs to provision into pool.
 
-  - `locale` = (optional, string) locale to set for pool.
-  - `allocation_default_netmask_length` = (optional, string)
-  - `allocation_max_netmask_length` = (optional, string)
-  - `allocation_min_netmask_length` = (optional, string)
+  - `locale`      = (optional, string) locale to set for pool.
   - `auto_import` = (optional, string)
-  - `allocation_resource_tags` = (optional, map(string))
-  - `tags` = (optional, map(string))
+  - `tags`        = (optional, map(string))
+  - `allocation_default_netmask_length` = (optional, string)
+  - `allocation_max_netmask_length`     = (optional, string)
+  - `allocation_min_netmask_length`     = (optional, string)
+  - `allocation_resource_tags`          = (optional, map(string))
 
   The following arguments are available but only relevant for public ips
   - `cidr_authorization_context` = (optional, map(string)) Details found in [official documentation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_ipam_pool_cidr#cidr_authorization_context).
-  - `aws_service` = (optional, string)
-  - `publicly_advertisable` = (optional, bool)
+  - `aws_service`                = (optional, string)
+  - `publicly_advertisable`      = (optional, bool)
 
   - `sub_pools` = (nested repeats of pool_configuration object above)
 EOF
