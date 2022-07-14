@@ -64,6 +64,34 @@ variable "pool_config" {
 }
 ```
 
+## RAM Sharing
+
+This module allows you to share invidual pools to any valid RAM principal. All levels of `var.pool_configurations` accept an argument `ram_share_principals` which should be a list of valid RAM share principals (org-id, ou-id, or account id).
+
+## Using Outputs
+
+Since resources are dynamically generated based on user configuration, we roll them into grouped outputs. For example, to get attributes off your level 2 pools:
+
+The output `pools_level_2` offers you a map of every pool where the name is the route of the tree keys [example `"corporate-us-west-2/dev"`](https://github.com/aws-ia/terraform-aws-ipam/blob/a7d508cb0be2f68d99952682c2392b6d7d541d96/examples/single_scope_ipv4/main.tf#L28).
+
+To get a specific ID:
+```
+> module.basic.pools_level_2["corporate-us-west-2/dev"].id
+"ipam-pool-0c816929a16f08747"
+```
+
+To get all IDs
+```terraform
+> [ for pool in module.basic.pools_level_2: pool["id"]]
+[
+  "ipam-pool-0c816929a16f08747",
+  "ipam-pool-0192c70b370384661",
+  "ipam-pool-037bb0524f8b3278e",
+  "ipam-pool-09400d26a6d1df4a5",
+  "ipam-pool-0ee5ebe8f8d2d7187",
+]
+```
+
 ## Implementation
 
 ### Implied pool names and descriptions
