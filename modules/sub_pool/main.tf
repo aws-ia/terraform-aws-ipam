@@ -1,11 +1,11 @@
 locals {
   description = var.pool_config.description == null ? var.implied_description : var.pool_config.description
-  
+
   name = var.pool_config.name == null ? var.implied_name : var.pool_config.name
   tags = merge(var.pool_config.tags, {
     Name = local.name }
   )
-  
+
   ram_share_enabled = try(length(var.pool_config.ram_share_principals), 0) > 0
 }
 
