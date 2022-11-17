@@ -34,3 +34,8 @@ terraform.rc
 .terraform.lock.hcl
 go.mod
 go.sum
+
+*.zip
+*.tar
+
+/.idea/

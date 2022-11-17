@@ -41,7 +41,9 @@ resource "aws_vpc_ipam" "main" {
 
 module "level_zero" {
   source = "./modules/sub_pool"
-
+  providers = {
+    aws.root = aws.root
+  }
   address_family      = var.address_family
   ipam_scope_id       = local.scope_id
   source_ipam_pool_id = null
@@ -59,7 +61,9 @@ module "level_zero" {
 module "level_one" {
   source   = "./modules/sub_pool"
   for_each = var.pool_configurations
-
+  providers = {
+    aws.root = aws.root
+  }
   address_family      = var.address_family
   ipam_scope_id       = local.scope_id
   source_ipam_pool_id = module.level_zero.pool.id
@@ -76,7 +80,9 @@ module "level_one" {
 module "level_two" {
   source   = "./modules/sub_pool"
   for_each = toset(local.level_2_pool_names)
-
+  providers = {
+    aws.root = aws.root
+  }
   address_family      = var.address_family
   ipam_scope_id       = local.scope_id
   source_ipam_pool_id = module.level_one[split("/", each.key)[0]].pool.id
@@ -94,7 +100,9 @@ module "level_two" {
 module "level_three" {
   source   = "./modules/sub_pool"
   for_each = toset(local.level_3_pool_names)
-
+  providers = {
+    aws.root = aws.root
+  }
   address_family = var.address_family
   ipam_scope_id  = local.scope_id
 

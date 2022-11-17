@@ -3,6 +3,7 @@ variable "pool_config" {
   type = object({
     cidr                 = list(string)
     ram_share_principals = optional(list(string))
+    create_scp           = optional(bool, false)
 
     locale                            = optional(string)
     allocation_default_netmask_length = optional(string)
