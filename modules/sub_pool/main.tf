@@ -1,5 +1,5 @@
 locals {
-  description = var.pool_config.description == null ? var.implied_description : var.pool_config.description
+  description = var.pool_config.description == null ? replace(var.implied_description, "/", "-") : var.pool_config.description
 
   name = var.pool_config.name == null ? var.implied_name : var.pool_config.name
   tags = merge(var.pool_config.tags, {
@@ -45,7 +45,7 @@ resource "aws_vpc_ipam_pool_cidr" "sub" {
 resource "aws_ram_resource_share" "sub" {
   count = local.ram_share_enabled ? 1 : 0
 
-  name = replace(var.implied_description, "/", "-")
+  name = local.description
 
   tags = local.tags
 }
