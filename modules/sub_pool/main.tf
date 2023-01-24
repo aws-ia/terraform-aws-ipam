@@ -45,7 +45,8 @@ resource "aws_vpc_ipam_pool_cidr" "sub" {
 resource "aws_ram_resource_share" "sub" {
   count = local.ram_share_enabled ? 1 : 0
 
-  name = local.description
+  # if a user specifies a var.pool.description must validate there is no / which is invalid for RAM names
+  name = replace(local.description, "/", "-")
 
   tags = local.tags
 }
