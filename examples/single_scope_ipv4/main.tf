@@ -20,14 +20,14 @@ module "basic" {
 
         sandbox = {
           name                 = "mysandbox"
-          netmask_length       = 20
+          cidr                 = ["10.0.0.0/20"]
           ram_share_principals = var.sandbox_ou_arn
           allocation_resource_tags = {
             env = "sandbox"
           }
         }
         dev = {
-          cidr = ["10.1.0.0/20"]
+          netmask_length = 20
 
           sub_pools = {
             team_a = {
@@ -37,7 +37,7 @@ module "basic" {
             }
 
             team_b = {
-              cidr                 = ["10.1.1.0/24"]
+              netmask_length       = 26
               ram_share_principals = var.prod_account # prod account
             }
           }

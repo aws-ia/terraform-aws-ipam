@@ -32,4 +32,5 @@ func TestExamplesIPv4Basic(t *testing.T) {
 
 	defer terraform.Destroy(t, terraformOptions)
 	terraform.InitAndApply(t, terraformOptions)
+	terraform.ApplyAndIdempotent(t, terraformOptions)
 }
