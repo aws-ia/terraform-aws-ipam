@@ -20,7 +20,7 @@ module "basic" {
 
         sandbox = {
           name                 = "mysandbox"
-          cidr                 = ["10.0.0.0/20"]
+          netmask_length       = 20
           ram_share_principals = var.sandbox_ou_arn
           allocation_resource_tags = {
             env = "sandbox"
@@ -31,7 +31,7 @@ module "basic" {
 
           sub_pools = {
             team_a = {
-              cidr                 = ["10.1.0.0/24"]
+              netmask_length       = 24
               ram_share_principals = var.prod_account # prod account
               locale               = "us-west-2"
             }
