@@ -7,6 +7,7 @@ locals {
   )
 
   ram_share_enabled = try(length(var.pool_config.ram_share_principals), 0) > 0
+  pool_cidrs        = var.pool_config.cidr == null ? [var.pool_config.netmask_length] : var.pool_config.cidr
 }
 
 resource "aws_vpc_ipam_pool" "sub" {
@@ -28,10 +29,11 @@ resource "aws_vpc_ipam_pool" "sub" {
 }
 
 resource "aws_vpc_ipam_pool_cidr" "sub" {
-  for_each = toset(var.pool_config.cidr)
+  for_each = toset(local.pool_cidrs)
 
-  ipam_pool_id = aws_vpc_ipam_pool.sub.id
-  cidr         = each.key
+  ipam_pool_id   = aws_vpc_ipam_pool.sub.id
+  cidr           = length(regexall("/", each.key)) > 0 ? each.key : null
+  netmask_length = length(regexall("/", each.key)) == 0 ? each.key : null
 
   dynamic "cidr_authorization_context" {
     for_each = var.pool_config.cidr_authorization_context == null ? [] : [1]

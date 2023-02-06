@@ -27,17 +27,17 @@ module "basic" {
           }
         }
         dev = {
-          cidr = ["10.1.0.0/20"]
+          netmask_length = 20
 
           sub_pools = {
             team_a = {
-              cidr                 = ["10.1.0.0/24"]
+              netmask_length       = 24
               ram_share_principals = var.prod_account # prod account
               locale               = "us-west-2"
             }
 
             team_b = {
-              cidr                 = ["10.1.1.0/24"]
+              netmask_length       = 26
               ram_share_principals = var.prod_account # prod account
             }
           }
