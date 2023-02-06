@@ -53,7 +53,7 @@ module "level_zero" {
     description                = var.top_description
     cidr_authorization_context = var.top_cidr_authorization_context
     name                       = var.top_name
-    netmask_length             = null
+    netmask_length             = var.top_netmask_length
   }
 }
 

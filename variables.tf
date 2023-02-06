@@ -32,6 +32,12 @@ variable "top_cidr" {
   type        = list(string)
 }
 
+variable "top_netmask_length" {
+  description = "Top-level netmask length to request. Not possible to use for IPv4. Only possible to use with amazon provided ipv6."
+  type        = number
+  default     = null
+}
+
 variable "top_ram_share_principals" {
   description = "Principals to create RAM shares for top-level pool."
   type        = list(string)
