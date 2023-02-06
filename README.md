@@ -7,11 +7,13 @@ Refer to the [examples/](https://github.com/aws-ia/terraform-aws-ipam/blob/main/
 
 The embedded example below describes a symmetrically nested pool structure, including its configuration, implementation details, requirements, and more.
 
-## Architecture
+## Architecture Example
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/aws-ia/terraform-aws-ipam/main/images/ipam_symmetrical.png" alt="symmetrically nested pool deployment" width="100%">
 </p>
+
+\_Note: The diagram above is an example of the type of Pool design you can deploy using this module.\_
 
 ## Configuration
 This module strongly relies on the `var.pool_configuration` variable, which is a multi-level, nested map that describes how to nest your IPAM pools. It can accept most `aws_vpc_ipam_pool` and `aws_vpc_ipam_pool_cidr` attributes (detailed below) as well as RAM share pools (at any level) to valid AWS principals. Nested pools do not inherit attributes from their source pool(s), so all configuration options are available at each level. `locale` is implied in sub pools after declared in a parent.
@@ -22,7 +24,7 @@ The `pool_configurations` variable is the structure of the other three levels. T
 
 ```
 pool_configurations = {
-  <pool name> = {
+  my_pool_name = {
     description      = "my pool"
     cidr             = ["10.0.0.0/16"]
     locale           = "us-east-1"
@@ -32,7 +34,7 @@ pool_configurations = {
       sandbox = {
         cidr = ["10.0.48.0/20"]
         ram_share_principals = [local.dev_ou_arn]
-        <any pool_config argument (below)>
+        # ...any pool_config argument (below)
       }
     }
   }
