@@ -7,7 +7,8 @@ variable "pool_configurations" {
   - `ram_share_principals` = (optional, list(string)) of valid organization principals to create ram shares to.
   - `name`                 = (optional, string) name to give the pool, the key of your map in var.pool_configurations will be used if omitted.
   - `description`          = (optional, string) description to give the pool, the key of your map in var.pool_configurations will be used if omitted.
-  - `cidr`                 = (optional, list(string)) list of CIDRs to provision into pool.
+  - `cidr`                 = (optional, list(string)) list of CIDRs to provision into pool. Conflicts with `netmask_length`.
+  - `netmask_length`       = (optional, number) netmask length to request provisioned into pool. Conflicts with `cidr`.
 
   - `locale`      = (optional, string) locale to set for pool.
   - `auto_import` = (optional, string)
