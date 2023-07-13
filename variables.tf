@@ -62,11 +62,16 @@ variable "top_name" {
   default     = null
 }
 
-variable "top_cidr_authorization_context" {
-  description = "A signed document that proves that you are authorized to bring the specified IP address range to Amazon using BYOIP. Document is not stored in the state file. For more information, refer to https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_ipam_pool_cidr#cidr_authorization_context."
-  type        = any
-  default     = null
+variable "top_cidr_authorization_contexts" {
+  description = "CIDR must match a CIDR defined in `var.top_cidr`. A list of signed documents that proves that you are authorized to bring the specified IP address range to Amazon using BYOIP. Document is not stored in the state file. For more information, refer to https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_ipam_pool_cidr#cidr_authorization_context."
+  type = list(object({
+    cidr      = string
+    message   = string
+    signature = string
+  }))
+  default = []
 }
+
 
 variable "address_family" {
   description = "IPv4/6 address family."

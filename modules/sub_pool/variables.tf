@@ -15,9 +15,8 @@ variable "pool_config" {
     netmask_length                    = optional(number)
     publicly_advertisable             = optional(bool)
 
-    allocation_resource_tags   = optional(map(string))
-    tags                       = optional(map(string))
-    cidr_authorization_context = optional(map(string))
+    allocation_resource_tags = optional(map(string))
+    tags                     = optional(map(string))
 
     sub_pools = optional(any)
   })
@@ -30,6 +29,17 @@ variable "pool_config" {
     error_message = "Pool Name: ${var.pool_config.name == null ? "Unamed" : var.pool_config.name} - must define exactly one of `cidr` or `netmask_length`."
   }
 }
+
+variable "cidr_authorization_contexts" {
+  description = "A list of signed documents that proves that you are authorized to bring the specified IP address range to Amazon using BYOIP. Document is not stored in the state file. For more information, refer to https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_ipam_pool_cidr#cidr_authorization_context."
+  type = list(object({
+    cidr      = string
+    message   = string
+    signature = string
+  }))
+  default = []
+}
+
 
 variable "implied_locale" {
   description = "Locale is implied from a parent pool even if another is specified. Its not possible to set child pools to different locales."
