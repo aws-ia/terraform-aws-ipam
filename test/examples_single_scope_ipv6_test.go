@@ -28,6 +28,7 @@ func TestExamplesIPv6(t *testing.T) {
 			TerraformDir: "../examples/single_scope_ipv6",
 			Vars: map[string]interface{}{
 				"ipv6_cidr":                            _ipv6_cidr,
+				"cidr_authorization_context_cidr":      _ipv6_cidr,
 				"cidr_authorization_context_message":   _message,
 				"cidr_authorization_context_signature": _signature,
 			},

@@ -12,10 +12,11 @@ module "ipv6_basic" {
   address_family  = "ipv6"
   ipam_scope_type = "public"
 
-  top_cidr_authorization_context = {
+  top_cidr_authorization_contexts = [{
+    cidr      = var.cidr_authorization_context_cidr
     message   = var.cidr_authorization_context_message
     signature = var.cidr_authorization_context_signature
-  }
+  }]
 
   pool_configurations = {
     us-east-1 = {
