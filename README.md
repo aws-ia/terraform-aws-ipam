@@ -1,6 +1,8 @@
 <!-- BEGIN_TF_DOCS -->
 # Terraform Module for Amazon VPC IP Address Manager on AWS
 
+<i>Note: For information regarding the 2.0 upgrade see our [upgrade guide](https://github.com/aws-ia/terraform-aws-ipam/blob/main/docs/UPGRADE-GUIDE-2.0.md).</i>
+
 Built to accommodate a wide range of use cases, this Terraform module can deploy both simple and complex Amazon Virtual Private Cloud (Amazon VPC) IP Address Manager (IPAM) configurations. It supports both symmetrically nested, multi-Region deployments (most common IPAM designs) as well as [asymmetically nested deployments](https://github.com/aws-ia/terraform-aws-ipam/blob/main/images/asymmetrical_example.png).
 
 Refer to the [examples/](https://github.com/aws-ia/terraform-aws-ipam/blob/main/examples) directory in this GitHub repository for examples.
@@ -61,7 +63,6 @@ variable "pool_config" {
 
     allocation_resource_tags   = optional(map(string))
     tags                       = optional(map(string))
-    cidr_authorization_context = optional(map(string))
 
     sub_pools = optional(any)
   })
@@ -121,7 +122,7 @@ The IPAM `operating_region` variable must be set for the primary Region in your 
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.53.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.7.0 |
 
 ## Modules
 
