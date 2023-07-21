@@ -46,14 +46,16 @@ module "level_zero" {
   ipam_scope_id       = local.scope_id
   source_ipam_pool_id = null
 
+  cidr_authorization_contexts = var.top_cidr_authorization_contexts
+
   pool_config = {
-    cidr                       = var.top_cidr
-    ram_share_principals       = var.top_ram_share_principals
-    auto_import                = var.top_auto_import
-    description                = var.top_description
-    cidr_authorization_context = var.top_cidr_authorization_context
-    name                       = var.top_name
-    netmask_length             = var.top_netmask_length
+    cidr                 = var.top_cidr
+    ram_share_principals = var.top_ram_share_principals
+    auto_import          = var.top_auto_import
+    description          = var.top_description
+
+    name           = var.top_name
+    netmask_length = var.top_netmask_length
   }
 }
 

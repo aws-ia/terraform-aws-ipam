@@ -8,6 +8,12 @@ locals {
 
   ram_share_enabled = try(length(var.pool_config.ram_share_principals), 0) > 0
   pool_cidrs        = var.pool_config.cidr == null ? [var.pool_config.netmask_length] : var.pool_config.cidr
+  cidr_authorization_contexts = {
+    for k, v in var.cidr_authorization_contexts : v.cidr => {
+      message   = v.message,
+      signature = v.signature
+    }
+  }
 }
 
 resource "aws_vpc_ipam_pool" "sub" {
@@ -36,10 +42,10 @@ resource "aws_vpc_ipam_pool_cidr" "sub" {
   netmask_length = length(regexall("/", each.key)) == 0 ? each.key : null
 
   dynamic "cidr_authorization_context" {
-    for_each = var.pool_config.cidr_authorization_context == null ? [] : [1]
+    for_each = length(var.cidr_authorization_contexts) == 0 ? [] : [1]
     content {
-      message   = var.pool_config.cidr_authorization_context.message
-      signature = var.pool_config.cidr_authorization_context.signature
+      message   = local.cidr_authorization_contexts[each.key].message
+      signature = local.cidr_authorization_contexts[each.key].signature
     }
   }
 }
