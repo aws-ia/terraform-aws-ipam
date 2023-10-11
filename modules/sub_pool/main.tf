@@ -30,6 +30,7 @@ resource "aws_vpc_ipam_pool" "sub" {
   auto_import                       = var.pool_config.auto_import
   aws_service                       = var.pool_config.aws_service
   publicly_advertisable             = var.pool_config.publicly_advertisable
+  public_ip_source                  = var.pool_config.public_ip_source
 
   tags = local.tags
 }

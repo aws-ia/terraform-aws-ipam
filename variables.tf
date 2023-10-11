@@ -30,6 +30,7 @@ EOF
 variable "top_cidr" {
   description = "Top-level CIDR blocks."
   type        = list(string)
+  default     = null
 }
 
 variable "top_netmask_length" {
@@ -72,6 +73,29 @@ variable "top_cidr_authorization_contexts" {
   default = []
 }
 
+variable "top_public_ip_source" {
+  description = "public IP source for usage with public IPs. Valid values \"amazon\" or \"byoip\"."
+  type        = string
+  default     = null
+}
+
+variable "top_publicly_advertisable" {
+  description = "Whether or not the top-level pool is publicly advertisable."
+  type        = bool
+  default     = null
+}
+
+variable "top_aws_service" {
+  description = "AWS service, for usage with public IPs. Valid values \"ec2\"."
+  type        = string
+  default     = null
+}
+
+variable "top_locale" {
+  description = "locale of the top-level pool. Do not use this value unless building an ipv6 contiguous block pool. You will have to instantiate the module for each operating region you want a pool structure in."
+  type        = string
+  default     = null
+}
 
 variable "address_family" {
   description = "IPv4/6 address family."

@@ -49,10 +49,15 @@ module "level_zero" {
   cidr_authorization_contexts = var.top_cidr_authorization_contexts
 
   pool_config = {
-    cidr                 = var.top_cidr
-    ram_share_principals = var.top_ram_share_principals
-    auto_import          = var.top_auto_import
-    description          = var.top_description
+    cidr                  = var.top_cidr
+    ram_share_principals  = var.top_ram_share_principals
+    auto_import           = var.top_auto_import
+    description           = var.top_description
+    public_ip_source      = var.top_public_ip_source
+    publicly_advertisable = var.top_publicly_advertisable
+    aws_service           = var.top_aws_service
+    locale                = var.top_locale
+
 
     name           = var.top_name
     netmask_length = var.top_netmask_length
