@@ -14,6 +14,7 @@ variable "pool_config" {
     name                              = optional(string)
     netmask_length                    = optional(number)
     publicly_advertisable             = optional(bool)
+    public_ip_source                  = optional(string)
 
     allocation_resource_tags = optional(map(string))
     tags                     = optional(map(string))
