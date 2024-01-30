@@ -22,8 +22,6 @@ locals {
   operating_regions = distinct(concat(local.all_locales, [data.aws_region.current.name]))
 }
 
-data "aws_region" "current" {}
-
 resource "aws_vpc_ipam" "main" {
   count = var.create_ipam ? 1 : 0
 

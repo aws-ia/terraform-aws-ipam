@@ -1,10 +1,36 @@
 ---
-
-fail_fast: false
-minimum_pre_commit_version: "2.6.0"
-
 repos:
-  - repo: https://github.com/aws-ia/pre-commit-configs
-    rev: c7091ec774495a41986bd9c5ea59152655ec4f3a  # frozen: v1.6.2
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: "v2.40.0"
     hooks:
-      - id: aws-ia-meta-hook
+      - id: commitizen
+      - id: commitizen-branch
+        stages: [ push ]
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: "v1.77.0"
+    hooks:
+      - id: terraform_docs
+        args:
+          - --hook-config=--path-to-file=README.md
+          - --hook-config=--add-to-existing-file=true
+          - --hook-config=--create-file-if-not-exist=true
+          - --hook-config=--working-dir="./"
+      - id: tfupdate
+        name: Autoupdate terraform
+        args:
+          - --args=terraform
+          - --args=--version '~> 1.7'
+      - id: tfupdate
+        name: Autoupdate aws provider
+        args:
+          - --args=provider aws
+          - --args=--version '~> 5.34'
+      - id: terraform_providers_lock
+        args:
+          - --args=-platform=darwin_arm64
+          - --args=-platform=linux_arm64
+          - --args=-platform=linux_amd64
+      - id: terraform_checkov
+        args:
+          - --args=--quiet
+          - --args=--skip-check CKV_TF_1
