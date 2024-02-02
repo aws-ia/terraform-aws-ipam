@@ -1,11 +1,5 @@
 ---
 repos:
-  - repo: https://github.com/commitizen-tools/commitizen
-    rev: "v2.40.0"
-    hooks:
-      - id: commitizen
-      - id: commitizen-branch
-        stages: [ push ]
   - repo: https://github.com/antonbabenko/pre-commit-terraform
     rev: "v1.77.0"
     hooks:
