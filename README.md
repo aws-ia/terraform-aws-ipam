@@ -133,7 +133,7 @@ The IPAM `operating_region` variable must be set for the primary Region in your 
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_label"></a> [label](#module\_label) | cloudposse/label/null | 0.25.0 |
+| <a name="module_label"></a> [label](#module\_label) | git@github.com:PimpMyNines/Terraform-Module-Standard-Labels-Tags.git | main |
 | <a name="module_level_one"></a> [level\_one](#module\_level\_one) | ./modules/sub_pool | n/a |
 | <a name="module_level_three"></a> [level\_three](#module\_level\_three) | ./modules/sub_pool | n/a |
 | <a name="module_level_two"></a> [level\_two](#module\_level\_two) | ./modules/sub_pool | n/a |

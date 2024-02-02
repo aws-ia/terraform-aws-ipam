@@ -38,4 +38,36 @@ No resources.
 | Name | Description |
 |------|-------------|
 | <a name="output_ipam_info"></a> [ipam\_info](#output\_ipam\_info) | Basic IPAM info. |
-<!-- END_TF_DOCS -->
+<!-- END_TF_DOCS --><!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+## Requirements
+
+No requirements.
+
+## Providers
+
+No providers.
+
+## Modules
+
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_basic"></a> [basic](#module\_basic) | ../.. | n/a |
+
+## Resources
+
+No resources.
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_prod_account"></a> [prod\_account](#input\_prod\_account) | Used for testing, prod account id | `list(string)` | n/a | yes |
+| <a name="input_prod_ou_arn"></a> [prod\_ou\_arn](#input\_prod\_ou\_arn) | arn of ou to share to prod accounts | `list(string)` | n/a | yes |
+| <a name="input_sandbox_ou_arn"></a> [sandbox\_ou\_arn](#input\_sandbox\_ou\_arn) | arn of ou to share to sandbox accounts | `list(string)` | n/a | yes |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| <a name="output_ipam_info"></a> [ipam\_info](#output\_ipam\_info) | Basic IPAM info. |
+<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

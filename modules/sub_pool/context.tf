@@ -14,8 +14,7 @@ locals {
 }
 
 module "label" {
-  source  = "cloudposse/label/null"
-  version = "0.25.0"
+  source  = "git@github.com:PimpMyNines/Terraform-Module-Standard-Labels-Tags.git?ref=main"
 
   enabled     = var.enabled
   namespace   = var.namespace

@@ -51,4 +51,39 @@ For IPv4 + IPv6, skip step 2. Reference the `public_default_scope_id` from the i
 ## Outputs
 
 No outputs.
-<!-- END_TF_DOCS -->
+<!-- END_TF_DOCS --><!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+## Requirements
+
+| Name | Version |
+|------|---------|
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 5.34 |
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 5.34 |
+
+## Modules
+
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_ipv4_scope"></a> [ipv4\_scope](#module\_ipv4\_scope) | ../.. | n/a |
+| <a name="module_overlapping_cidr_second_ipv4_scope"></a> [overlapping\_cidr\_second\_ipv4\_scope](#module\_overlapping\_cidr\_second\_ipv4\_scope) | ../.. | n/a |
+
+## Resources
+
+| Name | Type |
+|------|------|
+| [aws_vpc_ipam_scope.scope_for_overlapping_cidr](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_ipam_scope) | resource |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_cidr"></a> [cidr](#input\_cidr) | n/a | `string` | `"10.0.0.0/8"` | no |
+
+## Outputs
+
+No outputs.
+<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
