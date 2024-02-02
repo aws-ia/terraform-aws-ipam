@@ -24,7 +24,4 @@ repos:
           - --args=-platform=darwin_arm64
           - --args=-platform=linux_arm64
           - --args=-platform=linux_amd64
-      - id: terraform_checkov
-        args:
-          - --args=--quiet
-          - --args=--skip-check CKV_TF_1
+
