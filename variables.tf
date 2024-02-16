@@ -1,8 +1,90 @@
-variable "pool_configurations" {
-  type        = any
-  default     = {}
+variable "ipam_pool_configurations" {
+  type = map(object({
+    cidr                 = optional(list(string))
+    ram_share_principals = optional(list(string))
+
+    locale                            = optional(string)
+    allocation_default_netmask_length = optional(string)
+    allocation_max_netmask_length     = optional(string)
+    allocation_min_netmask_length     = optional(string)
+    auto_import                       = optional(bool)
+    aws_service                       = optional(string)
+    description                       = optional(string)
+    name                              = optional(string)
+    netmask_length                    = optional(number)
+    publicly_advertisable             = optional(bool)
+    public_ip_source                  = optional(string)
+
+    allocation_resource_tags = optional(map(string))
+    tags                     = optional(map(string))
+
+    sub_pools = optional(object({
+      cidr                 = optional(list(string))
+      ram_share_principals = optional(list(string))
+
+      locale                            = optional(string)
+      allocation_default_netmask_length = optional(string)
+      allocation_max_netmask_length     = optional(string)
+      allocation_min_netmask_length     = optional(string)
+      auto_import                       = optional(bool)
+      aws_service                       = optional(string)
+      description                       = optional(string)
+      name                              = optional(string)
+      netmask_length                    = optional(number)
+      publicly_advertisable             = optional(bool)
+      public_ip_source                  = optional(string)
+
+      allocation_resource_tags = optional(map(string))
+      tags                     = optional(map(string))
+
+      sub_pools = optional(object({
+        cidr                 = optional(list(string))
+        ram_share_principals = optional(list(string))
+
+        locale                            = optional(string)
+        allocation_default_netmask_length = optional(string)
+        allocation_max_netmask_length     = optional(string)
+        allocation_min_netmask_length     = optional(string)
+        auto_import                       = optional(bool)
+        aws_service                       = optional(string)
+        description                       = optional(string)
+        name                              = optional(string)
+        netmask_length                    = optional(number)
+        publicly_advertisable             = optional(bool)
+        public_ip_source                  = optional(string)
+
+        allocation_resource_tags = optional(map(string))
+        tags                     = optional(map(string))
+        sub_pools = optional(object({
+          cidr                 = optional(list(string))
+          ram_share_principals = optional(list(string))
+
+          locale                            = optional(string)
+          allocation_default_netmask_length = optional(string)
+          allocation_max_netmask_length     = optional(string)
+          allocation_min_netmask_length     = optional(string)
+          auto_import                       = optional(bool)
+          aws_service                       = optional(string)
+          description                       = optional(string)
+          name                              = optional(string)
+          netmask_length                    = optional(number)
+          publicly_advertisable             = optional(bool)
+          public_ip_source                  = optional(string)
+
+          allocation_resource_tags = optional(map(string))
+          tags                     = optional(map(string))
+        }))
+      }))
+    }))
+  }))
+  default = {
+    ipv4 = {
+      name              = "Top Level Pool"
+      description       = "Default Top Level Pool"
+    }
+  }
   description = <<-EOF
-  A multi-level, nested map describing nested IPAM pools. Can nest up to three levels with the top level being outside the `pool_configurations` in vars prefixed `top_`. If arugument descriptions are omitted, you can find them in the [official documentation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_ipam_pool#argument-reference).
+  A multi-level, nested map describing nested IPAM pools. Can nest up to three levels with the top level being outside the `pool_configurations` in vars prefixed `top_`. If argument descriptions are omitted, you can find them in the [official documentation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_ipam_pool#argument-reference).
 
   - `ram_share_principals` = (optional, list(string)) of valid organization principals to create ram shares to.
   - `name`                 = (optional, string) name to give the pool, the key of your map in var.pool_configurations will be used if omitted.
@@ -11,7 +93,7 @@ variable "pool_configurations" {
   - `netmask_length`       = (optional, number) netmask length to request provisioned into pool. Conflicts with `cidr`.
 
   - `locale`      = (optional, string) locale to set for pool.
-  - `auto_import` = (optional, string)
+  - `auto_import` = (optional, bool)
   - `tags`        = (optional, map(string))
   - `allocation_default_netmask_length` = (optional, string)
   - `allocation_max_netmask_length`     = (optional, string)
@@ -25,6 +107,7 @@ variable "pool_configurations" {
 
   - `sub_pools` = (nested repeats of pool_configuration object above)
 EOF
+
 }
 
 variable "top_cidr" {

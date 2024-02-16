@@ -11,7 +11,7 @@ module "basic" {
   top_cidr = ["10.0.0.0/8"]
   top_name = "basic ipam"
 
-  pool_configurations = {
+  ipam_pool_configurations = {
     corporate-us-west-2 = {
       description = "2nd level, locale us-west-2 pool"
       cidr        = ["10.0.0.0/16", "10.1.0.0/16"]

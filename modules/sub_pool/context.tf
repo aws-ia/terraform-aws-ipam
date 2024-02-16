@@ -14,7 +14,7 @@ locals {
 }
 
 module "label" {
-  source  = "git@github.com:PimpMyNines/Terraform-Module-Standard-Labels-Tags.git?ref=main"
+  source  = "git@github.com:PimpMyNines/Terraform-Module-Standard-Labels-Tags.git?ref=v1.0.1"
 
   enabled     = var.enabled
   namespace   = var.namespace

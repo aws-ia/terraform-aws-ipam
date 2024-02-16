@@ -28,7 +28,7 @@ module "ipv4_scope" {
 
   top_cidr = [var.cidr]
 
-  pool_configurations = {
+  ipam_pool_configurations = {
     us-west-2 = {
       cidr   = ["10.0.0.0/16"] # [local.regional_cidrs[0], local.regional_cidrs[1]]
       locale = "us-west-2"
@@ -58,7 +58,7 @@ module "overlapping_cidr_second_ipv4_scope" {
   create_ipam   = false
   ipam_scope_id = aws_vpc_ipam_scope.scope_for_overlapping_cidr.id
 
-  pool_configurations = {
+  ipam_pool_configurations = {
     us-east-1 = {
       name        = "ipv6 us-east-1"
       description = "pool for ipv6 us-east-1"

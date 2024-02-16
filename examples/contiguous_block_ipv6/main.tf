@@ -11,7 +11,7 @@ module "ipv6_contiguous" {
   top_public_ip_source      = "amazon"
   top_locale                = "us-east-1"
 
-  pool_configurations = {
+  ipam_pool_configurations = {
     us-east-1 = {
       name                  = "ipv6 us-east-1"
       description           = "pool for ipv6 us-east-1"
