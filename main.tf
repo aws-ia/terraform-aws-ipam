@@ -34,7 +34,7 @@ resource "aws_vpc_ipam" "main" {
     }
   }
 
-  tags = var.tags
+  tags = module.label.tags
 }
 
 module "level_zero" {
