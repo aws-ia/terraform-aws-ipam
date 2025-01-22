@@ -50,6 +50,7 @@ module "level_zero" {
 
   pool_config = {
     cidr                  = var.top_cidr
+    netmask_length        = var.top_netmask_length
     ram_share_principals  = var.top_ram_share_principals
     auto_import           = var.top_auto_import
     description           = var.top_description
@@ -58,9 +59,8 @@ module "level_zero" {
     aws_service           = var.top_aws_service
     locale                = var.top_locale
 
-
     name           = var.top_name
-    netmask_length = var.top_netmask_length
+    tags           = var.tags
   }
 }
 
