@@ -19,7 +19,7 @@ locals {
 
   # its possible to create pools in all regions except the primary, but we must pass the primary region
   # to aws_vpc_ipam.operating_regions.region_name
-  operating_regions = distinct(concat(local.all_locales, [data.aws_region.current.name]))
+  operating_regions = distinct(concat(local.all_locales, [data.aws_region.current.region]))
 }
 
 data "aws_region" "current" {}
@@ -27,7 +27,7 @@ data "aws_region" "current" {}
 resource "aws_vpc_ipam" "main" {
   count = var.create_ipam ? 1 : 0
 
-  description = "IPAM with primary in ${data.aws_region.current.name}"
+  description = "IPAM with primary in ${data.aws_region.current.region}"
 
   dynamic "operating_regions" {
     for_each = toset(local.operating_regions)
