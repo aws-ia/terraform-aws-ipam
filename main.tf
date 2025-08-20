@@ -20,6 +20,7 @@ locals {
   # its possible to create pools in all regions except the primary, but we must pass the primary region
   # to aws_vpc_ipam.operating_regions.region_name
   operating_regions = distinct(concat(local.all_locales, [data.aws_region.current.region]))
+  
 }
 
 data "aws_region" "current" {}
